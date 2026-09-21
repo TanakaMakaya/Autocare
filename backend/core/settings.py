@@ -29,7 +29,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'vehicles',
+
+    # Third-party apps
+    'corsheaders',               
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -39,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -119,6 +127,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # CORS Settings (Allow Angular to talk to Django)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200", # Angular default port
+    "http://127.0.0.1:4200",
 ]
 
 # REST Framework & JWT Settings
@@ -130,6 +139,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+# Optional but recommended for auth
+CORS_ALLOW_CREDENTIALS = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),

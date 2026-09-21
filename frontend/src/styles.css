@@ -1,3 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+
+@theme {
+  /* Primary Colors - Forest Code */
+  --color-primary-50: #e6f4f1;
+  --color-primary-100: #ccede3;
+  --color-primary-200: #99dbd6;
+  --color-primary-300: #66c9c9;
+  --color-primary-400: #33b7bc;
+  --color-primary-500: #075E46;  /* Forest Code */
+  --color-primary-600: #064a38;
+  --color-primary-700: #04382a;
+  --color-primary-800: #03291d;
+  --color-primary-900: #011b13;
+
+  /* Secondary Colors - Mint Fog */
+  --color-secondary-50: #f8fffb;
+  --color-secondary-100: #e8fff2;  /* Mint Fog */
+  --color-secondary-200: #d4ffe5;
+  --color-secondary-300: #b0ffcf;
+  --color-secondary-400: #7cffb0;
+  --color-secondary-500: #38ff88;
+  --color-secondary-600: #00e066;
+  
+  /* Accent for warnings/alerts */
+  --color-accent-500: #F97316;  /* Orange for overdue items */
+  --color-accent-600: #EA580C;
+}
+
+/* Optional: Set default background */
+body {
+  @apply bg-secondary-50 text-gray-900;
+}

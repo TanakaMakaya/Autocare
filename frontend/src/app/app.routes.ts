@@ -1,9 +1,12 @@
-// frontend/src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth/get-started', pathMatch: 'full' },
+  { 
+    path: 'auth/get-started', 
+    loadComponent: () => import('./auth/get-started/get-started').then(m => m.GetStartedComponent) 
+  },
   { 
     path: 'auth/login', 
     loadComponent: () => import('./auth/login/login').then(m => m.LoginComponent) 
@@ -14,13 +17,8 @@ export const routes: Routes = [
   },
   { 
     path: 'dashboard', 
-    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent),
     canActivate: [authGuard] 
   },
-  { 
-    path: 'vehicles', 
-    loadComponent: () => import('./features/vehicles/vehicles').then(m => m.Vehicles),
-    canActivate: [authGuard] 
-  },
-  { path: '**', redirectTo: 'dashboard' } // Fallback route
+  { path: '**', redirectTo: 'auth/get-started' }
 ];
