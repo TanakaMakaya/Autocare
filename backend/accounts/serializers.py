@@ -16,14 +16,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        user = User.objects.create(
+        # Use create_user from our CustomUserManager, which handles password hashing automatically
+        user = User.objects.create_user(
             email=validated_data['email'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            username=validated_data['email'] # Required by AbstractUser under the hood
+            password=validated_data['password']
         )
-        user.set_password(validated_data['password'])
-        user.save()
         return user
 
 class UserSerializer(serializers.ModelSerializer):

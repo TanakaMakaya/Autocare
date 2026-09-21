@@ -1,0 +1,74 @@
+@baseUrl = http://127.0.0.1:8000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzkwMTA0NTA0LCJpYXQiOjE3OTAwMTgxMDQsImp0aSI6IjE3YWExYjY2N2VmOTRmZDVhODU2ZmNjYzFlNDE3MzA0IiwidXNlcl9pZCI6IjgzY2EwNjBlLWUwMTgtNGFhMC1iYTkzLWU2YTc2NmIyYWJiOSJ9.IxcDPvsWUjSIK0yTEXvFP7QQCvpyf2PRs4DkBc70sYI
+
+### ============================================
+### 1. AUTHENTICATION ENDPOINTS
+### ============================================
+
+### 1. Register a new user
+POST {{baseUrl}}/auth/register/
+Content-Type: application/json
+
+{
+  "first_name": "admin",
+  "last_name": "adminsurname",
+  "email": "admin@autocare.com",
+  "password": "Germiston123",
+  "password2": "Germiston123"
+}
+
+### 2. Login to get JWT tokens 
+### (Run this first, copy the "access" string from the response, and paste it into @token at the top)
+POST {{baseUrl}}/auth/login/
+Content-Type: application/json
+
+{
+  "email": "admin@autocare.com",
+  "password": "Germiston123"
+}
+
+### 3. Get user profile (protected endpoint)
+GET {{baseUrl}}/auth/me/
+Authorization: Bearer {{token}}
+
+
+### ============================================
+### 2. VEHICLE ENDPOINTS
+### ============================================
+
+### 4. Add a new vehicle
+POST {{baseUrl}}/vehicles/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "My Sandero",
+  "registration_number": "CA 123-456",
+  "vin": "VF1BSDF0A12345678",
+  "manufacturer": "Renault",
+  "model": "Sandero Stepway",
+  "year": 2017,
+  "mileage": 215000,
+  "fuel_type": "petrol"
+}
+
+### 5. List all my vehicles
+GET {{baseUrl}}/vehicles/
+Authorization: Bearer {{token}}
+
+### 6. Get a specific vehicle (replace 1 with actual vehicle ID)
+GET {{baseUrl}}/vehicles/1/
+Authorization: Bearer {{token}}
+
+### 7. Update a vehicle's mileage
+PATCH {{baseUrl}}/vehicles/1/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "mileage": 10000
+}
+
+### 8. Delete a vehicle
+DELETE {{baseUrl}}/vehicles/1/
+Authorization: Bearer {{token}}
