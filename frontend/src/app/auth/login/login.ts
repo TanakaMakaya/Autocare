@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router'; 
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule], // FormsModule is needed for [(ngModel)]
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html'
 })
 export class LoginComponent {
@@ -16,7 +16,11 @@ export class LoginComponent {
   errorMessage = '';
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private route: ActivatedRoute 
+  ) {}
 
   onSubmit() {
     this.isLoading = true;
@@ -24,10 +28,14 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        // AuthService handles the redirect automatically on success
+
         this.isLoading = false;
+        
+        
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+        this.router.navigateByUrl(returnUrl);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isLoading = false;
         this.errorMessage = 'Invalid email or password. Please try again.';
         console.error('Login error:', err);

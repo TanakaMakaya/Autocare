@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from django.conf import settings  
 
 class Vehicle(models.Model):
     FUEL_CHOICES = [
@@ -9,7 +9,9 @@ class Vehicle(models.Model):
         ('electric', 'Electric'),
     ]
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicles')
+    # Use settings.AUTH_USER_MODEL instead of importing User directly
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vehicles')
+    
     name = models.CharField(max_length=100)
     registration_number = models.CharField(max_length=20, blank=True)
     vin = models.CharField(max_length=17, blank=True)
