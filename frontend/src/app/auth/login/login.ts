@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router'; // <-- Add ActivatedRoute
+import { Router, ActivatedRoute } from '@angular/router'; 
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService, 
     private router: Router,
-    private route: ActivatedRoute // <-- Add this
+    private route: ActivatedRoute 
   ) {}
 
   onSubmit() {
@@ -28,10 +28,10 @@ export class LoginComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        // ✅ SUCCESS - Redirect to dashboard or returnUrl
+
         this.isLoading = false;
         
-        // Check if there's a returnUrl in the query params
+        
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
         this.router.navigateByUrl(returnUrl);
       },
