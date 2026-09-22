@@ -90,6 +90,8 @@
           [disabled]="isLoading"
           class="w-full bg-gray-200 hover:bg-white text-gray-900 font-semibold py-4 rounded-full transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
+        <app-ripple-loader *ngIf="isLoading" size="sm" class="mr-3"></app-ripple-loader>
+  
           {{ isLoading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>

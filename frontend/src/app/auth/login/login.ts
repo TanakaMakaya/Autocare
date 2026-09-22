@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router'; 
 import { AuthService } from '../../services/auth.service';
+import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, RippleLoader],
   templateUrl: './login.html'
 })
 export class LoginComponent {
