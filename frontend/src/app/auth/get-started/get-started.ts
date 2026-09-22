@@ -10,7 +10,6 @@ interface Slide {
   selector: 'app-get-started',
   standalone: true,
   templateUrl: './get-started.html',
-  styleUrl: './get-started.css'
 })
 export class GetStartedComponent implements OnInit, OnDestroy {
   slides: Slide[] = [

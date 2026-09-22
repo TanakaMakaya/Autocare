@@ -13,16 +13,13 @@
       </button>
 
       <h2 class="text-3xl font-bold text-gray-900 mb-1">Create Account</h2>
-      <p class="text-gray-500">Join FleetCare today</p>
+      <p class="text-gray-500">Join AutoCare today</p> 
     </div>
 
     <!-- Dark Form Section -->
     <div class="flex-1 px-8 py-8">
-      <button
-        type="button"
       
-        class="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-4 rounded-full transition duration-200 shadow-lg flex items-center justify-center space-x-3 mb-6"
-      >
+      <button type="button" class="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-4 rounded-full transition duration-200 shadow-lg flex items-center justify-center space-x-3 mb-6">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M23.766 12.2764c0-.9175-.0737-1.7813-.2138-2.6084H12.24v4.9313h6.4878c-.2815 1.4854-1.1339 2.7444-2.4172 3.5891v2.9808h3.9139c2.2898-2.1069 3.5769-5.2094 3.5769-8.8928z"/>
           <path fill="#34A853" d="M12.24 24c3.24 0 5.9595-1.0752 7.946-2.9086l-3.9139-2.9808c-1.0866.729-2.4732 1.1591-4.0321 1.1591-3.0994 0-5.723-2.0918-6.6602-4.9033H1.5292v3.0782C3.5049 21.3027 7.5747 24 12.24 24z"/>
@@ -39,6 +36,33 @@
       </div>
 
       <form (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <!-- First & Last Name (Side by Side) -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+            <input
+              type="text"
+              [(ngModel)]="firstName"
+              name="firstName"
+              required
+              class="w-full px-0 py-3 border-b-2 border-gray-700 focus:border-white focus:outline-none bg-transparent text-white placeholder-gray-500 transition"
+              placeholder="John"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+            <input
+              type="text"
+              [(ngModel)]="lastName"
+              name="lastName"
+              required
+              class="w-full px-0 py-3 border-b-2 border-gray-700 focus:border-white focus:outline-none bg-transparent text-white placeholder-gray-500 transition"
+              placeholder="Doe"
+            >
+          </div>
+        </div>
+
         <!-- Email -->
         <div>
           <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
@@ -83,7 +107,7 @@
           <input
             type="checkbox"
             id="terms"
-            
+
             name="agreedToTerms"
             class="w-5 h-5 mt-0.5 rounded bg-transparent border-gray-500 text-white focus:ring-0 focus:ring-offset-0"
           >
