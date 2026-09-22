@@ -1,81 +1,73 @@
-<div class="min-h-screen bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center p-4">
-  <div class="max-w-md w-full">
-    <!-- Hero Image/Icon -->
-    <div class="text-center mb-10">
-      <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-2xl mb-6">
-        <svg class="w-14 h-14 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
-        </svg>
-      </div>
-      <h1 class="text-4xl font-bold text-white mb-3">AutoCare</h1>
-      <p class="text-secondary-100 text-lg">Your Digital Service Book</p>
-    </div>
+<div class="min-h-screen bg-gray-900 flex flex-col">
+  <div class="max-w-md w-full mx-auto flex flex-col flex-1">
 
-    <!-- Welcome Card -->
-    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-      <div class="p-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
-        <p class="text-gray-600 mb-8">Track your vehicle maintenance, repairs, and service history all in one place.</p>
+    <!-- Hero Image Section -->
+    <div
+      class="relative overflow-hidden"
+      style="height: 55vh; min-height: 380px;"
+    >
+      <img
+        src="/car1.jpg"
+        alt="hello"
+        class="absolute inset-0 w-full h-full object-cover"
+      >
+      <div class="absolute inset-0 bg-linear-to-b from-black/40 via-black/50 to-black/80"></div>
 
-        <!-- Features -->
-        <div class="space-y-4 mb-8">
-          <div class="flex items-start space-x-3">
-            <div class="flex-shrink-0 w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center mt-1">
-              <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="text-gray-800 font-medium">Track Maintenance</p>
-              <p class="text-gray-500 text-sm">Never miss a service again</p>
-            </div>
-          </div>
+      <div class="relative z-10 h-full flex flex-col p-6">
+        <img
+          src="/autocare-logo.png"
+          alt="AutoCare"
+          class="h-20 w-auto self-start object-contain"
+        >
 
-          <div class="flex items-start space-x-3">
-            <div class="flex-shrink-0 w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center mt-1">
-              <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="text-gray-800 font-medium">Smart Reminders</p>
-              <p class="text-gray-500 text-sm">Get notified before services are due</p>
-            </div>
-          </div>
+        <div class="mt-auto">
+          <h1 class="text-white text-4xl font-bold leading-tight mb-2">
+            {{ slides[currentSlide].title }}
+          </h1>
+          <p class="text-gray-300 text-base mb-6">
+            {{ slides[currentSlide].subtitle }}
+          </p>
 
-          <div class="flex items-start space-x-3">
-            <div class="flex-shrink-0 w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center mt-1">
-              <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="text-gray-800 font-medium">Cost Tracking</p>
-              <p class="text-gray-500 text-sm">Monitor your vehicle expenses</p>
-            </div>
+          <!-- Carousel dots -->
+    <div class="flex items-center space-x-2 mb-6">
+  @for (slide of slides; track $index) {
+    <button
+      type="button"
+      (click)="goToSlide($index)"
+      [class]="$index === currentSlide
+        ? 'w-8 h-2 rounded-full bg-white transition-all duration-300'
+        : 'w-2 h-2 rounded-full bg-white/60 hover:bg-white/80 transition-all duration-300'"
+      [attr.aria-label]="'Go to slide ' + ($index + 1)"
+    ></button>
+  }
           </div>
         </div>
-
-        <!-- Buttons -->
-        <button 
-          (click)="goToLogin()"
-          class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-xl transition duration-200 shadow-lg hover:shadow-xl mb-4"
-        >
-          Sign In
-        </button>
-        
-        <button 
-          (click)="goToRegister()"
-          class="w-full bg-white hover:bg-gray-50 text-primary-500 font-semibold py-4 rounded-xl border-2 border-primary-500 transition duration-200"
-        >
-          Create Account →
-        </button>
       </div>
     </div>
 
-    <p class="text-center text-secondary-100 mt-6 text-sm">
-      Manage your vehicles smarter
-    </p>
+    <!-- Bottom White Card -->
+    <div class="bg-white rounded-t-[2.5rem] -mt-8 relative z-10 flex-1 px-8 pt-8 pb-10 flex flex-col">
+      <p class="text-gray-600 text-center mb-6">
+        Get involved with your vehicles and maintenance around you — all in one simple dashboard.
+      </p>
+
+      <button
+        (click)="goToLogin()"
+        class="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-full transition duration-200 mb-4"
+      >
+        Sign in
+      </button>
+
+      <button
+        (click)="goToRegister()"
+        class="w-full text-gray-500 hover:text-gray-700 font-medium py-2 transition flex items-center justify-center space-x-1"
+      >
+        <span>Or Create Account</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </button>
+    </div>
+
   </div>
 </div>

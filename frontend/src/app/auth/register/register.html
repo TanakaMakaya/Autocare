@@ -1,121 +1,117 @@
-<div class="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-  <div class="max-w-md w-full">
-    <!-- Back Button -->
-    <button 
-      routerLink="/auth/login"
-      class="mb-6 text-white hover:text-secondary-100 transition flex items-center space-x-2"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
-      <span>Back</span>
-    </button>
+<div class="min-h-screen bg-gray-900 flex flex-col">
+  <div class="max-w-md w-full mx-auto flex flex-col flex-1">
 
-    <!-- Register Card -->
-    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-      <!-- Header -->
-      <div class="bg-gradient-to-br from-primary-500 to-primary-600 p-8 text-center">
-        <h2 class="text-3xl font-bold text-white mb-2">Create Account</h2>
-        <p class="text-secondary-100">Start a new adventure</p>
-      </div>
+    <!-- Top White Card -->
+    <div class="bg-white rounded-b-[2.5rem] px-8 pt-6 pb-8">
+      <button
+        routerLink="/auth/login"
+        class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition mb-6"
+      >
+        <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
 
-      <!-- Form -->
-      <div class="p-8">
-        <form (ngSubmit)="onSubmit()" class="space-y-5">
-          <!-- Name Fields -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-              <input 
-                type="text" 
-                [(ngModel)]="firstName" 
-                name="firstName" 
-                required
-                class="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-primary-500 focus:outline-none bg-transparent transition"
-                placeholder="John"
-              >
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-              <input 
-                type="text" 
-                [(ngModel)]="lastName" 
-                name="lastName" 
-                required
-                class="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-primary-500 focus:outline-none bg-transparent transition"
-                placeholder="Doe"
-              >
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-            <input 
-              type="email" 
-              [(ngModel)]="email" 
-              name="email" 
-              required
-              class="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-primary-500 focus:outline-none bg-transparent transition"
-              placeholder="you@example.com"
-            >
-          </div>
-
-          <!-- Password -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <input 
-              type="password" 
-              [(ngModel)]="password" 
-              name="password" 
-              required
-              class="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-primary-500 focus:outline-none bg-transparent transition"
-              placeholder="••••••••"
-            >
-          </div>
-
-          <!-- Confirm Password -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-            <input 
-              type="password" 
-              [(ngModel)]="confirmPassword" 
-              name="confirmPassword" 
-              required
-              class="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-primary-500 focus:outline-none bg-transparent transition"
-              placeholder="••••••••"
-            >
-          </div>
-
-          <!-- Terms -->
-          <div class="flex items-start">
-            <input type="checkbox" id="terms" class="w-4 h-4 mt-1 text-primary-500 border-gray-300 rounded focus:ring-primary-500">
-            <label for="terms" class="ml-2 text-sm text-gray-600">
-              I agree to the <a href="#" class="text-primary-500 hover:text-primary-600">Terms and Conditions</a>
-            </label>
-          </div>
-
-          <!-- Error Message -->
-          <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-            {{ errorMessage }}
-          </div>
-
-          <!-- Submit Button -->
-          <button 
-            type="submit" 
-            [disabled]="isLoading"
-            class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-xl transition duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
-          </button>
-        </form>
-
-        <!-- Login Link -->
-        <p class="mt-6 text-center text-gray-600">
-          Already have an account? 
-          <a routerLink="/auth/login" class="text-primary-500 hover:text-primary-600 font-semibold">Sign In</a>
-        </p>
-      </div>
+      <h2 class="text-3xl font-bold text-gray-900 mb-1">Create Account</h2>
+      <p class="text-gray-500">Join FleetCare today</p>
     </div>
+
+    <!-- Dark Form Section -->
+    <div class="flex-1 px-8 py-8">
+      <button
+        type="button"
+      
+        class="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-4 rounded-full transition duration-200 shadow-lg flex items-center justify-center space-x-3 mb-6"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.766 12.2764c0-.9175-.0737-1.7813-.2138-2.6084H12.24v4.9313h6.4878c-.2815 1.4854-1.1339 2.7444-2.4172 3.5891v2.9808h3.9139c2.2898-2.1069 3.5769-5.2094 3.5769-8.8928z"/>
+          <path fill="#34A853" d="M12.24 24c3.24 0 5.9595-1.0752 7.946-2.9086l-3.9139-2.9808c-1.0866.729-2.4732 1.1591-4.0321 1.1591-3.0994 0-5.723-2.0918-6.6602-4.9033H1.5292v3.0782C3.5049 21.3027 7.5747 24 12.24 24z"/>
+          <path fill="#FBBC05" d="M5.5798 14.3673c-.2401-.7189-.3767-1.4863-.3767-2.2764s.1366-1.5575.3767-2.2764V6.7364H1.5292C.6959 8.393.2231 10.1424.2231 12.0909c0 1.9485.4728 3.6979 1.3061 5.3545l4.0506-3.0781z"/>
+          <path fill="#EA4335" d="M12.24 4.7509c1.7723 0 3.3626.6104 4.6144 1.7929l3.4638-3.4638C18.1938 1.1859 15.4744 0 12.24 0 7.5747 0 3.5049 2.6973 1.5292 6.7364l4.0506 3.0781c.9372-2.8115 3.5608-4.9033 6.6602-4.9033z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="flex items-center mb-6">
+        <div class="flex-1 h-px bg-gray-700"></div>
+        <span class="px-4 text-gray-500 text-sm">OR</span>
+        <div class="flex-1 h-px bg-gray-700"></div>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+          <input
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            required
+            class="w-full px-0 py-3 border-b-2 border-gray-700 focus:border-white focus:outline-none bg-transparent text-white placeholder-gray-500 transition"
+            placeholder="you@example.com"
+          >
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            required
+            class="w-full px-0 py-3 border-b-2 border-gray-700 focus:border-white focus:outline-none bg-transparent text-white placeholder-gray-500 transition"
+            placeholder="••••••••"
+          >
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
+          <input
+            type="password"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+            class="w-full px-0 py-3 border-b-2 border-gray-700 focus:border-white focus:outline-none bg-transparent text-white placeholder-gray-500 transition"
+            placeholder="••••••••"
+          >
+        </div>
+
+        <!-- Terms -->
+        <div class="flex items-start">
+          <input
+            type="checkbox"
+            id="terms"
+            
+            name="agreedToTerms"
+            class="w-5 h-5 mt-0.5 rounded bg-transparent border-gray-500 text-white focus:ring-0 focus:ring-offset-0"
+          >
+          <label for="terms" class="ml-2 text-sm text-gray-300">
+            Agree to <a href="#" class="underline text-gray-300 hover:text-white">terms and conditions</a>
+          </label>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="bg-red-900/30 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-sm">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="isLoading"
+          class="w-full bg-gray-200 hover:bg-white text-gray-900 font-semibold py-4 rounded-full transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ isLoading ? 'Creating Account...' : 'Sign up' }}
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-gray-400">
+        Already have an account?
+        <a routerLink="/auth/login" class="text-white underline font-semibold">Sign in</a>
+      </p>
+    </div>
+
   </div>
 </div>
