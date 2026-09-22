@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { Router, ActivatedRoute, RouterLink } from '@angular/router'; 
 import { AuthService } from '../../services/auth.service';
+import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, RippleLoader],
   templateUrl: './login.html'
 })
 export class LoginComponent {
@@ -41,5 +42,7 @@ export class LoginComponent {
         console.error('Login error:', err);
       }
     });
+
+    
   }
 }

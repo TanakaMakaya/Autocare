@@ -3,8 +3,8 @@ import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 
 @Component({
   imports: [BottomNav],
-  selector: 'app-vehicles',
-  styleUrl: './vehicles.css',
-  templateUrl: './vehicles.html',
+  selector: 'app-profile',
+  styleUrl: './profile.css',
+  templateUrl: './profile.html',
 })
-export class Vehicles {}
+export class Profile {}

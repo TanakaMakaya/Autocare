@@ -1,25 +1,25 @@
-<div class="min-h-screen bg-secondary-50">
+<div class="min-h-screen bg-gray-50 pb-24">
   <!-- Header -->
-  <header class="bg-primary-500 text-white shadow-lg">
-    <div class="container mx-auto px-6 py-4">
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="px-4 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
-            </svg>
+          <div class="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold">
+            {{ user?.first_name?.charAt(0) || 'A' }}
           </div>
-          <h1 class="text-2xl font-bold">AutoCare</h1>
+          <div>
+            <h1 class="text-lg font-bold text-gray-900">AutoCare</h1>
+            <p class="text-xs text-gray-500">Fleet Console</p>
+          </div>
         </div>
         
-        <div class="flex items-center space-x-4">
-          <span class="text-secondary-100 hidden md:block">{{ user?.first_name }}</span>
-          <button 
-            (click)="logout()"
-            class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-sm font-medium transition"
-          >
-            Logout
+        <div class="flex items-center space-x-3">
+          <div class="bg-gray-100 px-3 py-1.5 rounded-full flex items-center space-x-1">
+            <div class="w-2 h-2 bg-gray-900 rounded-full animate-pulse"></div>
+            <span class="text-xs font-medium text-gray-700">2 alerts</span>
+          </div>
+          <button (click)="logout()" class="w-9 h-9 bg-red-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
+            {{ user?.first_name?.charAt(0) || 'A' }}
           </button>
         </div>
       </div>
@@ -27,106 +27,109 @@
   </header>
 
   <!-- Main Content -->
-  <main class="container mx-auto px-6 py-8">
-    <!-- Welcome Section -->
-    <div class="mb-8">
-      <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome back, {{ user?.first_name }}! 👋</h2>
-      <p class="text-gray-600">Here's what's happening with your vehicles today.</p>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-primary-500">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 text-sm font-medium mb-1">Total Vehicles</p>
-            <p class="text-3xl font-bold text-primary-500">0</p>
-          </div>
-          <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
-            </svg>
-          </div>
+  <main class="px-4 py-6 space-y-6">
+    
+    <!-- Year Summary Card -->
+    <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
+      <p class="text-sm text-gray-500 font-medium mb-2">THIS YEAR · ALL VEHICLES</p>
+      <h2 class="text-4xl font-bold text-gray-900 mb-2">R {{ stats.totalSpend | number:'1.0-0' }}</h2>
+      <p class="text-gray-600 text-sm mb-6">
+        Maintenance spend across {{ stats.vehicleCount }} vehicles · {{ stats.servicesLogged }} services logged
+      </p>
+      
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+          <p class="text-xs text-gray-500 font-medium mb-1">MONTHLY AVG</p>
+          <p class="text-xl font-bold text-gray-900">R {{ stats.monthlyAvg | number:'1.0-0' }}</p>
         </div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-accent-500">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 text-sm font-medium mb-1">Upcoming Services</p>
-            <p class="text-3xl font-bold text-accent-500">0</p>
-          </div>
-          <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-secondary-600">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 text-sm font-medium mb-1">Monthly Spend</p>
-            <p class="text-3xl font-bold text-gray-800">R0</p>
-          </div>
-          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
+        <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+          <p class="text-xs text-gray-500 font-medium mb-1">AVG / VEHICLE</p>
+          <p class="text-xl font-bold text-gray-900">R {{ stats.avgPerVehicle | number:'1.0-0' }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="bg-white rounded-2xl shadow-md p-6 mb-8">
-      <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <button class="flex flex-col items-center justify-center p-4 bg-secondary-50 hover:bg-secondary-100 rounded-xl transition">
-          <svg class="w-8 h-8 text-primary-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          <span class="text-sm font-medium text-gray-700">Add Vehicle</span>
-        </button>
-
-        <button class="flex flex-col items-center justify-center p-4 bg-secondary-50 hover:bg-secondary-100 rounded-xl transition">
-          <svg class="w-8 h-8 text-primary-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-          </svg>
-          <span class="text-sm font-medium text-gray-700">Log Service</span>
-        </button>
-
-        <button class="flex flex-col items-center justify-center p-4 bg-secondary-50 hover:bg-secondary-100 rounded-xl transition">
-          <svg class="w-8 h-8 text-primary-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-          </svg>
-          <span class="text-sm font-medium text-gray-700">Reminders</span>
-        </button>
-
-        <button class="flex flex-col items-center justify-center p-4 bg-secondary-50 hover:bg-secondary-100 rounded-xl transition">
-          <svg class="w-8 h-8 text-primary-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-          </svg>
-          <span class="text-sm font-medium text-gray-700">Reports</span>
+    <!-- Vehicles Section -->
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">Vehicles</h3>
+        <button class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-medium transition">
+          + Add vehicle
         </button>
       </div>
-    </div>
 
-    <!-- Empty State -->
-    <div class="bg-white rounded-2xl shadow-md p-12 text-center">
-      <div class="w-24 h-24 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-12 h-12 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+      <div class="space-y-4">
+        @for (vehicle of vehicles; track vehicle.id) {
+          <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
+            <div class="flex items-start space-x-4">
+              <!-- Vehicle Image Placeholder -->
+              <div class="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                </svg>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between mb-1">
+                  <h4 class="font-bold text-gray-900 truncate">{{ vehicle.name }}</h4>
+                  <span [class]="getStatusColor(vehicle.status)" class="px-3 py-1 rounded-full text-xs font-medium">
+                    {{ vehicle.statusLabel }}
+                  </span>
+                </div>
+                
+                <p class="text-sm text-gray-500 mb-3">
+                  {{ vehicle.year }} · {{ vehicle.registration }}
+                </p>
+                
+                <div class="flex items-center justify-between">
+                  <p class="text-base font-semibold text-gray-900">
+                    {{ vehicle.mileage | number:'1.0-0' }} km
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    Next: <span class="font-medium">{{ vehicle.nextService }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button class="w-full mt-4 text-gray-900 font-medium text-sm flex items-center justify-center space-x-1 hover:text-gray-700 transition">
+        <span>All vehicles</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
-      </div>
-      <h3 class="text-xl font-bold text-gray-800 mb-2">No vehicles yet</h3>
-      <p class="text-gray-600 mb-6">Add your first vehicle to start tracking maintenance and services.</p>
-      <button class="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg">
-        + Add Your First Vehicle
       </button>
     </div>
+
+    <!-- Maintenance Timeline Preview -->
+    <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-900">Maintenance timeline</h3>
+        <span class="text-xs text-gray-500">Last 4 of 6</span>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+          <div>
+            <p class="text-sm font-medium text-gray-900">Spark Plugs</p>
+            <p class="text-xs text-gray-500">2 days ago</p>
+          </div>
+          <span class="text-sm font-semibold text-gray-900">R 1,200</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+          <div>
+            <p class="text-sm font-medium text-gray-900">Oil Change</p>
+            <p class="text-xs text-gray-500">2 weeks ago</p>
+          </div>
+          <span class="text-sm font-semibold text-gray-900">R 850</span>
+        </div>
+      </div>
+    </div>
   </main>
+
+  <!-- Bottom Navigation -->
+  <app-bottom-nav></app-bottom-nav>
 </div>

@@ -15,10 +15,10 @@ export const routes: Routes = [
     path: 'auth/register', 
     loadComponent: () => import('./auth/register/register').then(m => m.RegisterComponent) 
   },
-  { 
-    path: 'dashboard', 
-    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent),
-    canActivate: [authGuard] 
-  },
+{ path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent), canActivate: [authGuard] },
+  { path: 'vehicles', loadComponent: () => import('./features/vehicles/vehicles').then(m => m.Vehicles), canActivate: [authGuard] },
+  { path: 'reminders', loadComponent: () => import('./features/reminders/reminders').then(m => m.Reminders), canActivate: [authGuard] },
+  { path: 'costs', loadComponent: () => import('./features/costs/costs').then(m => m.Costs), canActivate: [authGuard] },
+  { path: 'profile', loadComponent: () => import('./features/profile/profile').then(m => m.Profile), canActivate: [authGuard] },
   { path: '**', redirectTo: 'auth/get-started' }
 ];
