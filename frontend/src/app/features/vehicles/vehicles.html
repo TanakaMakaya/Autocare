@@ -1,4 +1,96 @@
-<p>vehicles works!</p>
+<div class="min-h-screen bg-gray-50 pb-24">
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40 flex items-center justify-between">
+    <h1 class="text-xl font-bold text-gray-900">My Vehicles</h1>
+    <button 
+      (click)="goToAddVehicle()"
+      class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-medium transition flex items-center space-x-1"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      <span>Add</span>
+    </button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-4 py-6">
+    
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <app-ripple-loader size="md" class="text-gray-900 mb-4"></app-ripple-loader>
+        <p class="text-gray-500">Loading your vehicles...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (errorMessage() && !isLoading()) {
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm text-center">
+        {{ errorMessage() }}
+        <button (click)="loadVehicles()" class="underline ml-2 font-medium">Retry</button>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading() && !errorMessage() && vehicles().length === 0) {
+      <div class="text-center py-16">
+        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">No vehicles yet</h3>
+        <p class="text-gray-500 mb-6">Add your first vehicle to start tracking maintenance.</p>
+        <button 
+          (click)="goToAddVehicle()"
+          class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-full font-medium transition"
+        >
+          Add Your First Vehicle
+        </button>
+      </div>
+    }
+
+    <!-- Vehicle List -->
+    @if (!isLoading() && !errorMessage() && vehicles().length > 0) {
+      <div class="space-y-4">
+        @for (vehicle of vehicles(); track vehicle.id) {
+          <div 
+            (click)="goToVehicleDetail(vehicle.id)"
+            class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm active:scale-[0.98] transition-transform cursor-pointer"
+          >
+            <div class="flex items-start space-x-4">
+              <!-- Image Placeholder -->
+              <div class="w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                @if (vehicle.photo_url) {
+                  <img [src]="vehicle.photo_url" alt="{{ vehicle.name }}" class="w-full h-full object-cover rounded-xl">
+                } @else {
+                  <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                  </svg>
+                }
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-gray-900 truncate">{{ vehicle.manufacturer }} {{ vehicle.model }}</h4>
+                <p class="text-sm text-gray-500 mb-2">{{ vehicle.year }} · {{ vehicle.registration_number }}</p>
+                
+                <div class="flex items-center justify-between">
+                  <p class="text-sm font-semibold text-gray-900">{{ vehicle.mileage | number:'1.0-0' }} km</p>
+                  <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md uppercase">
+                    {{ vehicle.fuel_type }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </main>
 
   <!-- Bottom Navigation -->
   <app-bottom-nav></app-bottom-nav>
+</div>

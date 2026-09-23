@@ -20,5 +20,15 @@ export const routes: Routes = [
   { path: 'reminders', loadComponent: () => import('./features/reminders/reminders').then(m => m.Reminders), canActivate: [authGuard] },
   { path: 'costs', loadComponent: () => import('./features/costs/costs').then(m => m.Costs), canActivate: [authGuard] },
   { path: 'profile', loadComponent: () => import('./features/profile/profile').then(m => m.Profile), canActivate: [authGuard] },
+    { 
+    path: 'vehicles/add', 
+    loadComponent: () => import('./features/add-vehicle/add-vehicle').then(m => m.AddVehicleComponent),
+    canActivate: [authGuard] 
+  },
+    { 
+    path: 'vehicles/:id', 
+    loadComponent: () => import('./features/vehicle-detail/vehicle-detail').then(m => m.VehicleDetailComponent),
+    canActivate: [authGuard] 
+  },
   { path: '**', redirectTo: 'auth/get-started' }
 ];
