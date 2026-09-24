@@ -1,0 +1,177 @@
+<div class="min-h-screen bg-gray-50 pb-24">
+  
+  <!-- Header -->
+  <header class="px-4 pt-4 pb-2 flex items-center space-x-3 bg-gray-50 sticky top-0 z-40">
+    <button (click)="goBack()" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-900 hover:bg-gray-100 transition border border-gray-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div>
+      <p class="text-[10px] font-bold text-gray-500 tracking-wider uppercase">Service History</p>
+      <h1 class="text-2xl font-bold text-gray-900">Log a service</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-4 py-4 max-w-2xl mx-auto">
+    <form [formGroup]="serviceForm" (ngSubmit)="saveService()" class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-6">
+      
+      <!-- 1. Vehicle Selector -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle</label>
+        <div class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-2xl px-4 py-3.5 font-medium">
+          {{ vehicleName }}
+        </div>
+      </div>
+
+      <!-- 2. Service Type Chips -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-3">Service type</label>
+        <div class="flex flex-wrap gap-2">
+          @for (type of serviceTypes; track type) {
+            <button 
+              type="button"
+              (click)="serviceForm.get('serviceType')?.setValue(type)"
+              [class.bg-gray-900]="serviceForm.get('serviceType')?.value === type"
+              [class.text-white]="serviceForm.get('serviceType')?.value === type"
+              [class.border-gray-900]="serviceForm.get('serviceType')?.value === type"
+              [class.bg-white]="serviceForm.get('serviceType')?.value !== type"
+              [class.text-gray-700]="serviceForm.get('serviceType')?.value !== type"
+              [class.border-gray-200]="serviceForm.get('serviceType')?.value !== type"
+              class="px-4 py-2.5 rounded-full text-sm font-medium border transition hover:bg-gray-100"
+            >
+              {{ type }}
+            </button>
+          }
+        </div>
+        @if (serviceForm.get('serviceType')?.touched && serviceForm.get('serviceType')?.invalid) {
+          <p class="text-red-500 text-xs mt-2 font-medium">Please select a service type</p>
+        }
+
+        <!-- Custom Text Box -->
+        @if (isCustom) {
+          <div class="mt-4">
+            <input 
+              type="text" 
+              formControlName="customServiceName"
+              placeholder="Enter custom service name (min 3 chars)..."
+              class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-2xl px-4 py-3.5 focus:border-gray-900 focus:outline-none transition"
+              [class.border-red-500]="serviceForm.get('customServiceName')?.touched && serviceForm.get('customServiceName')?.invalid"
+            >
+            @if (serviceForm.get('customServiceName')?.touched && serviceForm.get('customServiceName')?.invalid) {
+              <p class="text-red-500 text-xs mt-1 font-medium">{{ getFieldError('customServiceName') }}</p>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- 3. Date & Mileage -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+          <!-- max attribute natively grays out future dates in the picker -->
+          <input 
+            type="date" 
+            formControlName="date"
+            [max]="today"
+            class="w-full bg-white border border-gray-200 text-gray-900 rounded-2xl px-4 py-3.5 focus:border-gray-900 focus:outline-none transition"
+            [class.border-red-500]="serviceForm.get('date')?.touched && serviceForm.get('date')?.invalid"
+          >
+          @if (serviceForm.get('date')?.touched && serviceForm.get('date')?.invalid) {
+            <p class="text-red-500 text-xs mt-1 font-medium">{{ getFieldError('date') }}</p>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Mileage (km)</label>
+          <input 
+            type="number" 
+            formControlName="mileage"
+            min="1"
+            class="w-full bg-white border border-gray-200 text-gray-900 rounded-2xl px-4 py-3.5 focus:border-gray-900 focus:outline-none transition"
+            [class.border-red-500]="serviceForm.get('mileage')?.touched && serviceForm.get('mileage')?.invalid"
+          >
+          @if (serviceForm.get('mileage')?.touched && serviceForm.get('mileage')?.invalid) {
+            <p class="text-red-500 text-xs mt-1 font-medium">{{ getFieldError('mileage') }}</p>
+          }
+        </div>
+      </div>
+
+      <!-- 4. Cost Breakdown -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Cost (R)</label>
+        <div class="space-y-3">
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 text-gray-500 font-medium">R</span>
+            <input 
+              type="number" 
+              formControlName="partsCost"
+              placeholder="Parts cost"
+              min="0"
+              class="w-full bg-white border border-gray-200 text-gray-900 rounded-2xl pl-8 pr-4 py-3.5 focus:border-gray-900 focus:outline-none transition"
+              [class.border-red-500]="serviceForm.get('partsCost')?.touched && serviceForm.get('partsCost')?.invalid"
+            >
+          </div>
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 text-gray-500 font-medium">R</span>
+            <input 
+              type="number" 
+              formControlName="laborCost"
+              placeholder="Labor cost (optional)"
+              min="0"
+              class="w-full bg-white border border-gray-200 text-gray-900 rounded-2xl pl-8 pr-4 py-3.5 focus:border-gray-900 focus:outline-none transition"
+              [class.border-red-500]="serviceForm.get('laborCost')?.touched && serviceForm.get('laborCost')?.invalid"
+            >
+          </div>
+          
+          <!-- Auto-calculated Total -->
+          @if (totalCost > 0) {
+            <div class="flex justify-between items-center bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100">
+              <span class="text-sm font-medium text-gray-600">Total Cost</span>
+              <span class="text-lg font-bold text-gray-900">R {{ totalCost.toLocaleString() }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- 5. Notes -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+        <textarea 
+          formControlName="notes"
+          rows="3"
+          placeholder="Parts used, workshop, warranty..."
+          class="w-full bg-white border border-gray-200 text-gray-900 rounded-2xl px-4 py-3.5 focus:border-gray-900 focus:outline-none transition resize-none"
+        ></textarea>
+      </div>
+
+      <!-- 6. Attach Invoice -->
+      <div>
+        <label class="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-2xl p-4 cursor-pointer hover:bg-gray-50 transition">
+          <div class="flex items-center space-x-3">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+            </svg>
+            <span class="text-sm font-medium text-gray-700">
+              {{ fileName || 'Attach invoice (PDF or photo)' }}
+            </span>
+          </div>
+          <input type="file" class="hidden" accept=".pdf,image/*" (change)="onFileSelected($event)">
+        </label>
+      </div>
+
+      <!-- 7. Save Button -->
+      <button 
+        type="submit"
+        [disabled]="serviceForm.invalid || totalCost === 0"
+        class="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 rounded-2xl transition shadow-md text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Save service
+      </button>
+
+    </form>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <app-bottom-nav></app-bottom-nav>
+</div>

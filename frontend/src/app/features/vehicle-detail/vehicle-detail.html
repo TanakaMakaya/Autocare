@@ -10,7 +10,7 @@
   @if (!isLoading() && vehicle()) {
     
     <!-- 1. Top Header -->
-    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-gradient-to-b from-gray-100 to-gray-50">
+    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-linear-to-b from-gray-100 to-gray-50">
       <div class="flex items-center space-x-3">
         <button (click)="goBack()" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-900 hover:bg-gray-50 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,11 +19,11 @@
         </button>
         <div>
           <p class="text-[10px] font-bold text-gray-500 tracking-wider uppercase">{{ vehicle()!.registration_number }}</p>
-          <h1 class="text-xl font-bold text-gray-900 truncate max-w-[140px]">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
+          <h1 class="text-xl font-bold text-gray-900 truncate max-w-35">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
         </div>
       </div>
       <!-- CHANGED: Dark gray primary button -->
-      <button class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
+      <button routerLink="/vehicles/{{ vehicle()!.id }}/log-service" class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
         + Add service
       </button>
     </div>

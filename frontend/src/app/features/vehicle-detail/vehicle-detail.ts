@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VehicleService, Vehicle } from '../../services/vehicle.service';
 import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
@@ -8,7 +8,7 @@ import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 @Component({
   selector: 'app-vehicle-detail',
   standalone: true,
-  imports: [CommonModule, BottomNav, RippleLoader],
+  imports: [CommonModule, BottomNav, RippleLoader, RouterLink],
   templateUrl: './vehicle-detail.html'
 })
 export class VehicleDetailComponent implements OnInit {
