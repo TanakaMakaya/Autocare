@@ -2,9 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VehicleService, Vehicle } from '../../services/vehicle.service';
-import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
-
+import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 
 @Component({
   selector: 'app-vehicle-detail',
@@ -16,6 +15,16 @@ export class VehicleDetailComponent implements OnInit {
   vehicle = signal<Vehicle | null>(null);
   isLoading = signal(true);
   errorMessage = signal('');
+  
+  // Tab State
+  activeTab = signal<'overview' | 'services' | 'reminders' | 'documents'>('overview');
+
+  // Mock Data for Tabs (Replace with API calls later)
+  services = signal([
+    { id: 1, title: 'Spark Plugs', date: '15 Aug 2026', mileage: '214,000 km', provider: 'AutoZone', notes: 'NGK iridium plugs', cost: 620 },
+    { id: 2, title: 'Brake Pads', date: '20 Apr 2026', mileage: '210,500 km', provider: 'Brake Master', notes: 'Front pads replaced', cost: 1850 },
+    { id: 3, title: 'Oil Change', date: '10 Jan 2026', mileage: '205,000 km', provider: 'AutoZone', notes: '5W-30 Synthetic', cost: 850 }
+  ]);
 
   constructor(
     private route: ActivatedRoute,
@@ -27,9 +36,6 @@ export class VehicleDetailComponent implements OnInit {
     const vehicleId = this.route.snapshot.paramMap.get('id');
     if (vehicleId) {
       this.loadVehicle(vehicleId);
-    } else {
-      this.errorMessage.set('Vehicle ID not found.');
-      this.isLoading.set(false);
     }
   }
 
@@ -48,16 +54,22 @@ export class VehicleDetailComponent implements OnInit {
     });
   }
 
+  setTab(tab: 'overview' | 'services' | 'reminders' | 'documents'): void {
+    this.activeTab.set(tab);
+  }
+
   goBack() {
     this.router.navigate(['/vehicles']);
   }
 
-  // Placeholder for future features
-  logService() {
-    alert('Log Service feature coming soon!');
+  deleteVehicle() {
+    if (confirm('Are you sure you want to remove this vehicle?')) {
+      // Call delete API here
+      this.router.navigate(['/vehicles']);
+    }
   }
 
-  editVehicle() {
-    alert('Edit Vehicle feature coming soon!');
+  formatCurrency(amount: number): string {
+    return `R ${amount.toLocaleString()}`;
   }
 }
