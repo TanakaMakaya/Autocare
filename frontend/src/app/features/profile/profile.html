@@ -1,3 +1,120 @@
-<p>profile works!</p>
+<div class="min-h-screen bg-gray-50 pb-24">
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40">
+    <h1 class="text-xl font-bold text-gray-900">Profile</h1>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-4 py-6 max-w-2xl mx-auto space-y-6">
+    
+    <!-- 1. Account Section -->
+    <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
+      <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Account</h2>
+      
+      <div class="flex items-center space-x-4">
+        <!-- Avatar -->
+        <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+          {{ user()?.name?.charAt(0) || 'A' }}
+        </div>
+        
+        <!-- Info -->
+        <div class="flex-1 min-w-0">
+          <h3 class="text-lg font-bold text-gray-900 truncate">{{ user()?.name }}</h3>
+          <p class="text-sm text-gray-500 truncate">{{ user()?.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Documents Section (NEW) -->
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+      <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider px-6 pt-6 pb-2">Documents</h2>
+      
+      <button (click)="viewAllDocuments()" class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <div class="text-left">
+            <span class="block font-medium text-gray-900">My Documents</span>
+            <span class="text-xs text-gray-500">{{ documentCount() }} files uploaded</span>
+          </div>
+        </div>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 3. Support Section -->
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+      <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider px-6 pt-6 pb-2">Support</h2>
+      
+      <!-- Open a Ticket -->
+      <button (click)="openTicket()" class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition border-b border-gray-100">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          <span class="font-medium text-gray-900">Open a ticket</span>
+        </div>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <!-- Suggest a Feature -->
+      <button (click)="suggestFeature()" class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <span class="font-medium text-gray-900">Suggest a feature</span>
+        </div>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 4. App Info Section -->
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <span class="text-sm font-medium text-gray-700">App Version</span>
+        <span class="text-sm text-gray-500">{{ appVersion }}</span>
+      </div>
+      <button class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition border-b border-gray-100">
+        <span class="text-sm font-medium text-gray-700">Terms of Service</span>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+      <button class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition">
+        <span class="text-sm font-medium text-gray-700">Privacy Policy</span>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 5. Logout Button -->
+    <button 
+      (click)="logout()"
+      class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-4 rounded-2xl transition duration-200 border border-red-200 flex items-center justify-center space-x-2"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      <span>Log out</span>
+    </button>
+
+  </main>
+
   <!-- Bottom Navigation -->
   <app-bottom-nav></app-bottom-nav>
+</div>
