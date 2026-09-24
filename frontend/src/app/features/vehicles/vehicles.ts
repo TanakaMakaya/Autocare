@@ -48,7 +48,8 @@ export class Vehicles implements OnInit {
     this.router.navigate(['/vehicles/add']);
   }
 
-  goToVehicleDetail(vehicleId: string): void {
+  goToVehicleDetail(vehicleId: string| number): void {
     console.log('Navigate to detail for vehicle:', vehicleId);
+    this.router.navigate(['/vehicles', vehicleId]);
   }
 }
