@@ -1,4 +1,78 @@
-<p>reminders works!</p>
+<div class="min-h-screen bg-gray-50 pb-24">
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40">
+    <h1 class="text-xl font-bold text-gray-900">Reminders</h1>
+    <p class="text-sm text-gray-500 mt-1">Stay on top of your maintenance</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-4 py-6 max-w-2xl mx-auto">
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm text-center">
+        <p class="text-2xl font-bold text-red-600">1</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Urgent</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm text-center">
+        <p class="text-2xl font-bold text-amber-600">1</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Due Soon</p>
+      </div>
+      <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm text-center">
+        <p class="text-2xl font-bold text-blue-600">2</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Upcoming</p>
+      </div>
+    </div>
+
+    <!-- Reminders List -->
+    <div class="space-y-4">
+      @for (reminder of reminders(); track reminder.id) {
+        <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-start space-x-4">
+          
+          <!-- Icon -->
+          <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getIcon(reminder.type)"/>
+            </svg>
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between mb-1">
+              <h3 class="font-bold text-gray-900 truncate pr-2">{{ reminder.title }}</h3>
+              <span [class]="getStatusColor(reminder.status)" class="px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap">
+                {{ reminder.status | titlecase }}
+              </span>
+            </div>
+            
+            <p class="text-sm text-gray-500 mb-2">{{ reminder.vehicleName }}</p>
+            
+            <div class="flex items-center text-sm font-medium text-gray-900">
+              <svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              {{ reminder.dueDate }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Empty State (Hidden for now, but good to have) -->
+    @if (reminders().length === 0) {
+      <div class="text-center py-16">
+        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">All caught up!</h3>
+        <p class="text-gray-500">No upcoming reminders for your vehicles.</p>
+      </div>
+    }
+
+  </main>
 
   <!-- Bottom Navigation -->
   <app-bottom-nav></app-bottom-nav>
+</div>
