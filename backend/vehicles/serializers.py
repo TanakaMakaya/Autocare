@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vehicle
+from .models import ServiceRecord, Vehicle
 
 class VehicleSerializer(serializers.ModelSerializer):
     owner_name = serializers.SerializerMethodField()
@@ -15,3 +15,13 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     def get_owner_name(self, obj):
         return f"{obj.owner.first_name} {obj.owner.last_name}"
+
+class ServiceRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceRecord
+        fields = [
+            'id', 'vehicle', 'service_type', 'custom_name', 'date', 
+            'mileage', 'parts_cost', 'labor_cost', 'total_cost', 
+            'notes', 'invoice_url', 'created_at'
+        ]
+        read_only_fields = ['owner', 'created_at', 'vehicle']
