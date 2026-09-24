@@ -53,4 +53,15 @@ export class VehicleService {
   deleteVehicle(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}/`);
   }
+
+
+ // Get services for a specific vehicle
+  getServices(vehicleId: string | number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${vehicleId}/services/`);
+  }
+
+  // Log a new service
+  logService(vehicleId: string | number, serviceData: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/${vehicleId}/services/`, serviceData);
+  }
 }

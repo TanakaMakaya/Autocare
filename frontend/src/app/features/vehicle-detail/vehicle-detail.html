@@ -10,7 +10,7 @@
   @if (!isLoading() && vehicle()) {
     
     <!-- 1. Top Header -->
-    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-gradient-to-b from-gray-100 to-gray-50">
+    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-linear-to-b from-gray-100 to-gray-50">
       <div class="flex items-center space-x-3">
         <button (click)="goBack()" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-900 hover:bg-gray-50 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,11 +19,11 @@
         </button>
         <div>
           <p class="text-[10px] font-bold text-gray-500 tracking-wider uppercase">{{ vehicle()!.registration_number }}</p>
-          <h1 class="text-xl font-bold text-gray-900 truncate max-w-[140px]">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
+          <h1 class="text-xl font-bold text-gray-900 truncate max-w-35">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
         </div>
       </div>
       <!-- CHANGED: Dark gray primary button -->
-      <button class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
+      <button routerLink="/vehicles/{{ vehicle()!.id }}/log-service" class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
         + Add service
       </button>
     </div>
@@ -92,71 +92,60 @@
     <!-- 3. Scrollable Sections -->
     <main class="px-4 space-y-8 max-w-2xl mx-auto">
       
-      <!-- Maintenance Timeline Section -->
+            <!-- Maintenance Timeline Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-gray-900">Maintenance timeline</h2>
-          <span class="text-sm text-gray-500 font-medium">3 records</span>
+          <span class="text-sm text-gray-500 font-medium">{{ services().length }} records</span>
         </div>
 
-        <div class="space-y-4 relative">
-          <div class="absolute left-5 top-4 bottom-4 w-0.5 bg-gray-200"></div>
-          
-          <!-- Service 1 -->
-          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative pl-16">
-            <div class="absolute left-3 top-6 w-4 h-4 bg-amber-400 rounded-full border-4 border-white shadow"></div>
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-bold text-gray-900 text-lg">Spark Plugs</h3>
-              <div class="flex items-center space-x-3">
-                <span class="font-bold text-gray-900">R 1 820</span>
-                <button class="text-gray-400 hover:text-red-500 transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
-              </div>
-            </div>
-            <p class="text-sm text-gray-500">15 Aug 2026 · 214,000 km · Iridium set</p>
+        @if (isServicesLoading()) {
+          <div class="flex justify-center py-8">
+            <app-ripple-loader size="sm" class="text-gray-900"></app-ripple-loader>
           </div>
+        } @else if (services().length === 0) {
+          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm text-center">
+            <p class="text-gray-500 mb-4">No service records yet.</p>
+            <a [routerLink]="'/vehicles/' + vehicle()!.id + '/log-service'" class="inline-block bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
+              + Log your first service
+            </a>
+          </div>
+        } @else {
+          <div class="space-y-4 relative">
+            <div class="absolute left-5 top-4 bottom-4 w-0.5 bg-gray-200"></div>
+            
+            @for (service of services(); track service.id) {
+              <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative pl-16">
+                <!-- Timeline Dot -->
+                <div class="absolute left-3 top-6 w-4 h-4 bg-gray-900 rounded-full border-4 border-white shadow"></div>
+                
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="font-bold text-gray-900 text-lg">{{ getServiceName(service) }}</h3>
+                  <div class="flex items-center space-x-3">
+                    <span class="font-bold text-gray-900">{{ formatCurrency(service.total_cost) }}</span>
+                    <!-- Delete button placeholder -->
+                    <button class="text-gray-400 hover:text-red-500 transition">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                  </div>
+                </div>
+                
+                <p class="text-sm text-gray-500 mb-3">{{ formatDate(service.date) }} · {{ formatMileage(service.mileage) }}</p>
+                
+                @if (service.notes) {
+                  <p class="text-sm text-gray-600 mb-3 italic">"{{ service.notes }}"</p>
+                }
 
-          <!-- Service 2 -->
-          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative pl-16">
-            <div class="absolute left-3 top-6 w-4 h-4 bg-gray-900 rounded-full border-4 border-white shadow"></div>
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-bold text-gray-900 text-lg">Brake Pads</h3>
-              <div class="flex items-center space-x-3">
-                <span class="font-bold text-gray-900">R 3 940</span>
-                <button class="text-gray-400 hover:text-red-500 transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
+                @if (service.invoice_url) {
+                  <a [href]="service.invoice_url" target="_blank" class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg flex items-center w-fit font-medium hover:bg-gray-200 transition">
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                    View Invoice
+                  </a>
+                }
               </div>
-            </div>
-            <p class="text-sm text-gray-500 mb-3">20 Apr 2026 · 210,500 km · Front pair + rotors skimmed</p>
-            <!-- CHANGED: Gray tag instead of blue -->
-            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg flex items-center w-fit font-medium">
-              <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-              invoice-apr-brakes.pdf
-            </span>
+            }
           </div>
-
-          <!-- Service 3 -->
-          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative pl-16">
-            <div class="absolute left-3 top-6 w-4 h-4 bg-gray-900 rounded-full border-4 border-white shadow"></div>
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-bold text-gray-900 text-lg">Oil Service</h3>
-              <div class="flex items-center space-x-3">
-                <span class="font-bold text-gray-900">R 2 480</span>
-                <button class="text-gray-400 hover:text-red-500 transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
-              </div>
-            </div>
-            <p class="text-sm text-gray-500 mb-3">10 Jan 2026 · 205,000 km · Full synthetic 5W-30, oil + filter</p>
-            <!-- CHANGED: Gray tag instead of blue -->
-            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg flex items-center w-fit font-medium">
-              <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-              invoice-jan-oil.pdf
-            </span>
-          </div>
-        </div>
+        }
       </section>
 
       <!-- Reminders Section -->
@@ -210,7 +199,7 @@
 
         <div class="space-y-3">
           <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
               <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
@@ -222,7 +211,7 @@
           </div>
 
           <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
               <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
