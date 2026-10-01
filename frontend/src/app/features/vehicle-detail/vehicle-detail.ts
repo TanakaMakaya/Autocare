@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VehicleService, Vehicle } from '../../services/vehicle.service';
@@ -31,11 +31,18 @@ export class VehicleDetailComponent implements OnInit {
   isLoading = signal(true);
   errorMessage = signal('');
   
-  activeTab = signal<'overview' | 'services' | 'reminders' | 'documents'>('services'); // Default to services to see the timeline
-
   // Real services data
   services = signal<ServiceRecord[]>([]);
   isServicesLoading = signal(false);
+
+  // Computed Stats (Automatically updates when services() changes!)
+  lifetimeSpend = computed(() => this.services().reduce((sum, s) => sum + Number(s.total_cost), 0));
+  thisYearSpend = computed(() => {
+    const currentYear = new Date().getFullYear().toString();
+    return this.services()
+      .filter(s => s.date.startsWith(currentYear))
+      .reduce((sum, s) => sum + Number(s.total_cost), 0);
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +87,21 @@ export class VehicleDetailComponent implements OnInit {
     });
   }
 
+  deleteService(serviceId: number): void {
+    if (confirm('Are you sure you want to delete this service record?')) {
+      const vehicleId = this.vehicle()?.id;
+      if (!vehicleId) return;
+
+      this.vehicleService.deleteService(vehicleId, serviceId).subscribe({
+        next: () => {
+          // Remove from the UI instantly
+          this.services.update(services => services.filter(s => s.id !== serviceId));
+        },
+        error: (err) => console.error('Failed to delete service', err)
+      });
+    }
+  }
+
   goBack() {
     this.router.navigate(['/vehicles']);
   }
@@ -95,7 +117,7 @@ export class VehicleDetailComponent implements OnInit {
     }
   }
 
-  // Helpers for clean UI
+  // Helpers
   formatCurrency(amount: number): string {
     return `R ${amount.toLocaleString()}`;
   }

@@ -64,4 +64,9 @@ export class VehicleService {
   logService(vehicleId: string | number, serviceData: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/${vehicleId}/services/`, serviceData);
   }
+
+    // Delete a specific service record
+  deleteService(vehicleId: string | number, serviceId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/services/${serviceId}/`);
+  }
 }

@@ -22,7 +22,6 @@
           <h1 class="text-xl font-bold text-gray-900 truncate max-w-35">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
         </div>
       </div>
-      <!-- CHANGED: Dark gray primary button -->
       <button routerLink="/vehicles/{{ vehicle()!.id }}/log-service" class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
         + Add service
       </button>
@@ -55,7 +54,7 @@
         </div>
         <p class="text-gray-500 text-lg mb-6">{{ vehicle()!.year }} · {{ vehicle()!.registration_number }}</p>
 
-        <!-- Details List -->
+        <!-- Details List (Fixed nesting) -->
         <div class="space-y-4">
           <div class="flex justify-between items-center">
             <span class="text-gray-500">VIN</span>
@@ -67,11 +66,11 @@
           </div>
           <div class="flex justify-between items-center">
             <span class="text-gray-500">Spent this year</span>
-            <span class="font-bold text-gray-900">R 8 240</span>
+            <span class="font-bold text-gray-900">{{ formatCurrency(thisYearSpend()) }}</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-gray-500">Lifetime spend</span>
-            <span class="font-bold text-gray-900">R 8 240</span>
+            <span class="font-bold text-gray-900">{{ formatCurrency(lifetimeSpend()) }}</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-gray-500">Next up</span>
@@ -92,7 +91,7 @@
     <!-- 3. Scrollable Sections -->
     <main class="px-4 space-y-8 max-w-2xl mx-auto">
       
-            <!-- Maintenance Timeline Section -->
+      <!-- Maintenance Timeline Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-gray-900">Maintenance timeline</h2>
@@ -123,8 +122,8 @@
                   <h3 class="font-bold text-gray-900 text-lg">{{ getServiceName(service) }}</h3>
                   <div class="flex items-center space-x-3">
                     <span class="font-bold text-gray-900">{{ formatCurrency(service.total_cost) }}</span>
-                    <!-- Delete button placeholder -->
-                    <button class="text-gray-400 hover:text-red-500 transition">
+                    <!-- Delete button -->
+                    <button (click)="deleteService(service.id)" class="text-gray-400 hover:text-red-500 transition">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                   </div>
@@ -152,7 +151,6 @@
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-gray-900">Reminders</h2>
-          <!-- CHANGED: Light gray secondary button -->
           <button class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition">
             + Add reminder
           </button>
@@ -191,7 +189,6 @@
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-gray-900">Documents</h2>
-          <!-- CHANGED: Light gray secondary button -->
           <button class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition">
             + Upload
           </button>
