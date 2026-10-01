@@ -67,3 +67,19 @@ class VehicleDocument(models.Model):
 
     def __str__(self):
         return f"{self.title} for {self.vehicle.name}"
+
+
+class Reminder(models.Model):
+    vehicle = models.ForeignKey('Vehicle', related_name='reminders', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    title = models.CharField(max_length=100) # e.g., "License Disc Renewal"
+    due_date = models.DateField(null=True, blank=True)
+    due_mileage = models.IntegerField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+    is_completed = models.BooleanField(default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} for {self.vehicle.name}"

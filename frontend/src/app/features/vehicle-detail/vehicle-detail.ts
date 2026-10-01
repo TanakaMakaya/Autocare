@@ -29,6 +29,16 @@ export interface VehicleDocument {
   created_at: string;
 }
 
+export interface VehicleReminder {
+  id: number;
+  title: string;
+  due_date: string | null;
+  due_mileage: number | null;
+  notes: string;
+  is_completed: boolean;
+  created_at: string;
+}
+
 @Component({
   selector: 'app-vehicle-detail',
   standalone: true,
@@ -65,6 +75,18 @@ export class VehicleDetailComponent implements OnInit {
   uploadTitle = '';
   uploadCategory = 'Registration';
 
+    // Reminders State
+  reminders = signal<VehicleReminder[]>([]);
+  isRemindersLoading = signal(false);
+  showReminderForm = signal(false);
+  isSavingReminder = signal(false);
+  
+  // Reminder Form Fields
+  reminderTitle = '';
+  reminderDate = '';
+  reminderMileage = '';
+  reminderNotes = '';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -78,6 +100,7 @@ export class VehicleDetailComponent implements OnInit {
       this.loadVehicle(vehicleId);
       this.loadServices(vehicleId);
       this.loadDocuments(vehicleId);
+      this.loadReminders(vehicleId);
     }
   }
 
@@ -242,5 +265,78 @@ export class VehicleDetailComponent implements OnInit {
 
   getServiceName(service: ServiceRecord): string {
     return service.custom_name || service.service_type;
+  }
+
+    loadReminders(vehicleId: string): void {
+    this.isRemindersLoading.set(true);
+    this.vehicleService.getReminders(vehicleId).subscribe({
+      next: (data) => {
+        this.reminders.set(data);
+        this.isRemindersLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Error fetching reminders:', err);
+        this.isRemindersLoading.set(false);
+      }
+    });
+  }
+
+  submitReminder(): void {
+    if (!this.reminderTitle.trim()) {
+      alert('Please enter a reminder title.');
+      return;
+    }
+
+    this.isSavingReminder.set(true);
+    const vehicleId = this.vehicle()?.id;
+    if (!vehicleId) return;
+
+    const payload = {
+      title: this.reminderTitle.trim(),
+      due_date: this.reminderDate || null,
+      due_mileage: this.reminderMileage ? Number(this.reminderMileage) : null,
+      notes: this.reminderNotes.trim(),
+      is_completed: false
+    };
+
+    this.vehicleService.addReminder(vehicleId, payload).subscribe({
+      next: (newReminder) => {
+        this.reminders.update(reminders => [...reminders, newReminder]);
+        this.resetReminderForm();
+      },
+      error: (err) => {
+        console.error('Failed to save reminder', err);
+        alert('Failed to save reminder.');
+      },
+      complete: () => this.isSavingReminder.set(false)
+    });
+  }
+
+  deleteReminder(reminderId: number): void {
+    if (confirm('Are you sure you want to delete this reminder?')) {
+      const vehicleId = this.vehicle()?.id;
+      if (!vehicleId) return;
+
+      this.vehicleService.deleteReminder(vehicleId, reminderId).subscribe({
+        next: () => {
+          this.reminders.update(reminders => reminders.filter(r => r.id !== reminderId));
+        },
+        error: (err) => console.error('Failed to delete reminder', err)
+      });
+    }
+  }
+
+  resetReminderForm(): void {
+    this.showReminderForm.set(false);
+    this.reminderTitle = '';
+    this.reminderDate = '';
+    this.reminderMileage = '';
+    this.reminderNotes = '';
+  }
+
+  // Helper to format date nicely for the UI
+  formatReminderDate(dateStr: string | null): string {
+    if (!dateStr) return 'No date set';
+    return new Date(dateStr).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 }

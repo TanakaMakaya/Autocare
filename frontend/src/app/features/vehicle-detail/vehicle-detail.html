@@ -147,42 +147,88 @@
         }
       </section>
 
-      <!-- Reminders Section -->
+            <!-- Reminders Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-gray-900">Reminders</h2>
-          <button class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition">
-            + Add reminder
+          <button (click)="showReminderForm.set(!showReminderForm())" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add</span>
           </button>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center space-x-3">
-              <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-              <h3 class="font-bold text-gray-900 text-lg">Oil change</h3>
-            </div>
-            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-              </svg>
-            </div>
-          </div>
-          
-          <p class="text-sm text-gray-600 mb-3">Due 10 Oct 2026 · at 216,200 km · Renault Sandero Stepway · AB12CDGP</p>
-          
-          <div class="flex items-center space-x-2 text-sm text-red-600 font-bold mb-4">
-            <span>Due in 16 days</span>
-            <span class="text-gray-400">·</span>
-            <span>Due in 1,200 km</span>
-          </div>
+        <!-- Add Reminder Form -->
+        @if (showReminderForm()) {
+          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm mb-4">
+            <h3 class="font-bold text-gray-900 mb-4">New Reminder</h3>
+            <div class="space-y-4">
+              <input type="text" [(ngModel)]="reminderTitle" placeholder="e.g., License Disc Renewal" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs text-gray-500 font-medium mb-1 block">Due Date (Optional)</label>
+                  <input type="date" [(ngModel)]="reminderDate" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 font-medium mb-1 block">Due Mileage (Optional)</label>
+                  <input type="number" [(ngModel)]="reminderMileage" placeholder="km" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+                </div>
+              </div>
 
-          <button class="text-gray-400 hover:text-red-500 transition ml-auto flex">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
+              <textarea [(ngModel)]="reminderNotes" rows="2" placeholder="Notes..." class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition resize-none"></textarea>
+
+              <div class="flex space-x-3 pt-2">
+                <button (click)="resetReminderForm()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl transition">Cancel</button>
+                <button (click)="submitReminder()" [disabled]="isSavingReminder()" class="flex-1 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center">
+                  @if (isSavingReminder()) {
+                    <app-ripple-loader size="sm" class="text-white"></app-ripple-loader>
+                  } @else {
+                    <span>Save Reminder</span>
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Reminders List -->
+        @if (isRemindersLoading()) {
+          <div class="flex justify-center py-8"><app-ripple-loader size="sm" class="text-gray-900"></app-ripple-loader></div>
+        } @else if (reminders().length === 0 && !showReminderForm()) {
+          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm text-center">
+            <p class="text-gray-500">No upcoming reminders.</p>
+          </div>
+        } @else {
+          <div class="space-y-3">
+            @for (reminder of reminders(); track reminder.id) {
+              <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative group">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center space-x-3">
+                    <span class="w-3 h-3 bg-amber-500 rounded-full mt-1.5"></span>
+                    <h3 class="font-bold text-gray-900 text-lg">{{ reminder.title }}</h3>
+                  </div>
+                  <button (click)="deleteReminder(reminder.id)" class="text-gray-400 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  </button>
+                </div>
+                
+                <div class="pl-6 space-y-1">
+                  @if (reminder.due_date || reminder.due_mileage) {
+                    <p class="text-sm text-gray-600">
+                      Due: 
+                      @if (reminder.due_date) { <span class="font-medium">{{ formatReminderDate(reminder.due_date) }}</span> }
+                      @if (reminder.due_date && reminder.due_mileage) { <span> · </span> }
+                      @if (reminder.due_mileage) { <span class="font-medium">{{ reminder.due_mileage | number:'1.0-0' }} km</span> }
+                    </p>
+                  }
+                  @if (reminder.notes) {
+                    <p class="text-sm text-gray-500 italic">"{{ reminder.notes }}"</p>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
       </section>
 
            <!-- Documents Section -->
