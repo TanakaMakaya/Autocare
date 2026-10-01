@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .models import ServiceRecord, Vehicle
-from .serializers import ServiceRecordSerializer, VehicleSerializer
+from .models import ServiceRecord, Vehicle, VehicleDocument
+from .serializers import ServiceRecordSerializer, VehicleDocumentSerializer, VehicleSerializer
 
 class VehicleListCreateView(generics.ListCreateAPIView):
     """List all vehicles for the logged-in user, or create a new one."""
@@ -47,3 +47,24 @@ class ServiceDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return ServiceRecord.objects.filter(owner=self.request.user)
+
+
+class DocumentListCreateView(generics.ListCreateAPIView):
+    serializer_class = VehicleDocumentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        return VehicleDocument.objects.filter(vehicle_id=vehicle_id, owner=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(id=vehicle_id, owner=self.request.user)
+        serializer.save(owner=self.request.user, vehicle=vehicle)
+
+class DocumentDeleteView(generics.DestroyAPIView):
+    serializer_class = VehicleDocumentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return VehicleDocument.objects.filter(owner=self.request.user)

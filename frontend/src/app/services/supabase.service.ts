@@ -44,4 +44,26 @@ export class SupabaseService {
     this.uploadProgress.set(100);
     return urlData.publicUrl;
   }
+
+
+  async uploadDocument(file: File, vehicleId: string): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `doc-${vehicleId}-${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error } = await this.supabase.storage
+      .from('vehicle-documents') // <-- Uses the new bucket
+      .upload(filePath, file);
+
+    if (error) {
+      console.error('Supabase document upload error:', error);
+      throw new Error('Failed to upload document.');
+    }
+
+    const { data } = this.supabase.storage
+      .from('vehicle-documents')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
 }
