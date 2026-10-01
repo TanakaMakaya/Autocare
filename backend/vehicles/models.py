@@ -53,3 +53,17 @@ class ServiceRecord(models.Model):
 
     def __str__(self):
         return f"{self.service_type} for {self.vehicle.name} on {self.date}"
+
+
+class VehicleDocument(models.Model):
+    vehicle = models.ForeignKey('Vehicle', related_name='documents', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    title = models.CharField(max_length=100) # e.g., "License Disc 2026"
+    category = models.CharField(max_length=50) # e.g., "Registration", "Insurance", "Invoice"
+    file_url = models.URLField() # The Supabase link
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} for {self.vehicle.name}"

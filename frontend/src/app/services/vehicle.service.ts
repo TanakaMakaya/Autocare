@@ -69,4 +69,19 @@ export class VehicleService {
   deleteService(vehicleId: string | number, serviceId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/services/${serviceId}/`);
   }
+
+    // Get documents for a specific vehicle
+  getDocuments(vehicleId: string | number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${vehicleId}/documents/`);
+  }
+
+  // Add a new document
+  addDocument(vehicleId: string | number, documentData: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/${vehicleId}/documents/`, documentData);
+  }
+
+  // Delete a document
+  deleteDocument(vehicleId: string | number, documentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/documents/${documentId}/`);
+  }
 }
