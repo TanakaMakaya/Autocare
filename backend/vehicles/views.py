@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .models import ServiceRecord, Vehicle, VehicleDocument
-from .serializers import ServiceRecordSerializer, VehicleDocumentSerializer, VehicleSerializer
+from .models import Reminder, ServiceRecord, Vehicle, VehicleDocument
+from .serializers import ReminderSerializer, ServiceRecordSerializer, VehicleDocumentSerializer, VehicleSerializer
 
 class VehicleListCreateView(generics.ListCreateAPIView):
     """List all vehicles for the logged-in user, or create a new one."""
@@ -68,3 +68,24 @@ class DocumentDeleteView(generics.DestroyAPIView):
 
     def get_queryset(self):
         return VehicleDocument.objects.filter(owner=self.request.user)
+
+class ReminderListCreateView(generics.ListCreateAPIView):
+    serializer_class = ReminderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        # Order by due_date, then show incomplete first
+        return Reminder.objects.filter(vehicle_id=vehicle_id, owner=self.request.user).order_by('is_completed', 'due_date')
+
+    def perform_create(self, serializer):
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(id=vehicle_id, owner=self.request.user)
+        serializer.save(owner=self.request.user, vehicle=vehicle)
+
+class ReminderDestroyView(generics.DestroyAPIView):
+    serializer_class = ReminderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Reminder.objects.filter(owner=self.request.user)

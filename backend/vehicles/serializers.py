@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ServiceRecord, Vehicle, VehicleDocument
+from .models import Reminder, ServiceRecord, Vehicle, VehicleDocument
 
 class VehicleSerializer(serializers.ModelSerializer):
     owner_name = serializers.SerializerMethodField()
@@ -32,3 +32,10 @@ class VehicleDocumentSerializer(serializers.ModelSerializer):
         model = VehicleDocument
         fields = ['id', 'vehicle', 'title', 'category', 'file_url', 'created_at']
         read_only_fields = ['owner', 'created_at', 'vehicle'] # Prevents the 400 error!
+
+
+class ReminderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reminder
+        fields = ['id', 'vehicle', 'title', 'due_date', 'due_mileage', 'notes', 'is_completed', 'created_at']
+        read_only_fields = ['owner', 'created_at', 'vehicle'] # Prevents 400 errors

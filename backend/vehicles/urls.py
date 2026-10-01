@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DocumentDeleteView, DocumentListCreateView, ServiceDetailView, ServiceListCreateView, VehicleListCreateView, VehicleDetailView
+from .views import DocumentDeleteView, DocumentListCreateView, ReminderDestroyView, ReminderListCreateView, ServiceDetailView, ServiceListCreateView, VehicleListCreateView, VehicleDetailView
 
 urlpatterns = [
     path('', VehicleListCreateView.as_view(), name='vehicle-list-create'),
@@ -8,4 +8,6 @@ urlpatterns = [
     path('<int:vehicle_id>/services/<int:pk>/', ServiceDetailView.as_view(), name='service-detail'),
     path('<int:vehicle_id>/documents/', DocumentListCreateView.as_view(), name='document-list'),
     path('<int:vehicle_id>/documents/<int:pk>/', DocumentDeleteView.as_view(), name='document-delete'),
+    path('<int:vehicle_id>/reminders/', ReminderListCreateView.as_view(), name='reminder-list'),
+    path('<int:vehicle_id>/reminders/<int:pk>/', ReminderDestroyView.as_view(), name='reminder-delete'),
 ]

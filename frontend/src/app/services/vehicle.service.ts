@@ -84,4 +84,17 @@ export class VehicleService {
   deleteDocument(vehicleId: string | number, documentId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/documents/${documentId}/`);
   }
+
+  //  REMINDER METHODS (ADD THESE) 
+  getReminders(vehicleId: string | number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${vehicleId}/reminders/`);
+  }
+
+  addReminder(vehicleId: string | number, reminderData: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/${vehicleId}/reminders/`, reminderData);
+  }
+
+  deleteReminder(vehicleId: string | number, reminderId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/reminders/${reminderId}/`);
+  }
 }
