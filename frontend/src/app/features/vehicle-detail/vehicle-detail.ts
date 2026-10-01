@@ -87,6 +87,8 @@ export class VehicleDetailComponent implements OnInit {
   reminderMileage = '';
   reminderNotes = '';
 
+  today = new Date().toISOString().split('T')[0]; 
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
