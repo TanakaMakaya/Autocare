@@ -40,14 +40,14 @@ export class AddVehicleComponent implements OnInit {
   errorMessage = signal('');
 
   constructor(
-    private route: ActivatedRoute, // Injected ActivatedRoute
+    private route: ActivatedRoute, 
     private vehicleService: VehicleService,
     private supabaseService: SupabaseService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Check if we have an ID in the URL (e.g., /vehicles/3/edit)
+    
     this.vehicleId = this.route.snapshot.paramMap.get('id');
     
     if (this.vehicleId) {
