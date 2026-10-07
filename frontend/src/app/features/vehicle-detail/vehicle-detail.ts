@@ -151,47 +151,54 @@ export class VehicleDetailComponent implements OnInit {
   }
 
   deleteService(serviceId: number): void {
-    if (confirm('Are you sure you want to delete this service record?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteService(vehicleId, serviceId).subscribe({
-        next: () => {
-          this.services.update(services => services.filter(s => s.id !== serviceId));
-        },
-        error: (err) => console.error('Failed to delete service', err)
-      });
-    }
+    this.openModal(
+      'Delete service record?', 
+      'This action cannot be undone.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteService(vehicleId, serviceId).subscribe({
+          next: () => this.services.update(s => s.filter(svc => svc.id !== serviceId)),
+          error: (err) => console.error('Failed to delete service', err)
+        });
+      }
+    );
   }
 
   deleteDocument(docId: number): void {
-    if (confirm('Are you sure you want to delete this document?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteDocument(vehicleId, docId).subscribe({
-        next: () => {
-          this.documents.update(docs => docs.filter(d => d.id !== docId));
-        },
-        error: (err) => console.error('Failed to delete document', err)
-      });
-    }
+    this.openModal(
+      'Delete document?', 
+      'This will remove the document from your records.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteDocument(vehicleId, docId).subscribe({
+          next: () => this.documents.update(d => d.filter(doc => doc.id !== docId)),
+          error: (err) => console.error('Failed to delete document', err)
+        });
+      }
+    );
   }
 
   goBack() {
     this.router.navigate(['/vehicles']);
   }
 
-  deleteVehicle() {
-    const id = this.vehicle()?.id;
-    if (!id) return;
-    if (confirm('Are you sure you want to remove this vehicle?')) {
-      this.vehicleService.deleteVehicle(id).subscribe({
-        next: () => this.router.navigate(['/vehicles']),
-        error: (err) => console.error('Failed to delete vehicle', err)
-      });
-    }
+  deleteVehicle(): void {
+    this.openModal(
+      'Remove vehicle?', 
+      'This will permanently delete this vehicle and all its associated records.',
+      () => {
+        const id = this.vehicle()?.id;
+        if (!id) return;
+        this.vehicleService.deleteVehicle(id).subscribe({
+          next: () => this.router.navigate(['/vehicles']),
+          error: (err) => console.error('Failed to delete vehicle', err)
+        });
+      }
+    );
   }
+
 
   // --- Document Upload Logic ---
 
