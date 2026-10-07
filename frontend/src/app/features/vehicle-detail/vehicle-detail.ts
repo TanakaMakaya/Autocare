@@ -6,6 +6,7 @@ import { VehicleService, Vehicle } from '../../services/vehicle.service';
 import { SupabaseService } from '../../services/supabase.service'; // Required for document upload
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal';
 
 export interface ServiceRecord {
   id: number;
@@ -42,7 +43,7 @@ export interface VehicleReminder {
 @Component({
   selector: 'app-vehicle-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, BottomNav, RippleLoader],
+  imports: [CommonModule, FormsModule, RouterLink, BottomNav, RippleLoader, ConfirmModalComponent],
   templateUrl: './vehicle-detail.html'
 })
 export class VehicleDetailComponent implements OnInit {
@@ -315,19 +316,19 @@ export class VehicleDetailComponent implements OnInit {
   }
 
   deleteReminder(reminderId: number): void {
-    if (confirm('Are you sure you want to delete this reminder?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteReminder(vehicleId, reminderId).subscribe({
-        next: () => {
-          this.reminders.update(reminders => reminders.filter(r => r.id !== reminderId));
-        },
-        error: (err) => console.error('Failed to delete reminder', err)
-      });
-    }
+    this.openModal(
+      'Delete reminder?', 
+      'This reminder will be permanently removed.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteReminder(vehicleId, reminderId).subscribe({
+          next: () => this.reminders.update(r => r.filter(rem => rem.id !== reminderId)),
+          error: (err) => console.error('Failed to delete reminder', err)
+        });
+      }
+    );
   }
-
   resetReminderForm(): void {
     this.showReminderForm.set(false);
     this.reminderTitle = '';
@@ -362,5 +363,35 @@ export class VehicleDetailComponent implements OnInit {
         );
       }
     });
+  }
+
+    // Modal State
+  modalState = signal({
+    isOpen: false,
+    title: '',
+    message: '',
+    action: null as (() => void) | null,
+    isDestructive: true
+  });
+
+  openModal(title: string, message: string, action: () => void, isDestructive = true): void {
+    this.modalState.set({
+      isOpen: true,
+      title,
+      message,
+      action,
+      isDestructive
+    });
+  }
+
+  closeModal(): void {
+    this.modalState.update(state => ({ ...state, isOpen: false, action: null }));
+  }
+
+  handleModalConfirm(): void {
+    if (this.modalState().action) {
+      this.modalState().action!(); // Execute the delete logic
+    }
+    this.closeModal();
   }
 }

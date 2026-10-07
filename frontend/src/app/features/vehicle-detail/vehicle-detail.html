@@ -358,6 +358,15 @@
 
     </main>
   }
+    <!-- Custom Confirmation Modal -->
+  <app-confirm-modal
+    [isOpen]="modalState().isOpen"
+    [title]="modalState().title"
+    [message]="modalState().message"
+    [isDestructive]="modalState().isDestructive"
+    (confirmed)="handleModalConfirm()"
+    (cancelled)="closeModal()"
+  ></app-confirm-modal>
 
   <!-- Bottom Navigation -->
   <app-bottom-nav></app-bottom-nav>
