@@ -341,4 +341,26 @@ export class VehicleDetailComponent implements OnInit {
     if (!dateStr) return 'No date set';
     return new Date(dateStr).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
   }
+
+    toggleReminderCompletion(reminder: VehicleReminder): void {
+    const vehicleId = this.vehicle()?.id;
+    if (!vehicleId) return;
+
+    // 1. Optimistic UI update (flip the status instantly)
+    const newStatus = !reminder.is_completed;
+    this.reminders.update(reminders => 
+      reminders.map(r => r.id === reminder.id ? { ...r, is_completed: newStatus } : r)
+    );
+
+    // 2. Send to backend
+    this.vehicleService.updateReminder(vehicleId, reminder.id, { is_completed: newStatus }).subscribe({
+      error: (err) => {
+        console.error('Failed to update reminder', err);
+        // Revert UI if the backend fails
+        this.reminders.update(reminders => 
+          reminders.map(r => r.id === reminder.id ? { ...r, is_completed: reminder.is_completed } : r)
+        );
+      }
+    });
+  }
 }

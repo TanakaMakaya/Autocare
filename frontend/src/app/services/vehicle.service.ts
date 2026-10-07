@@ -97,4 +97,9 @@ export class VehicleService {
   deleteReminder(vehicleId: string | number, reminderId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${vehicleId}/reminders/${reminderId}/`);
   }
+
+    // Update a reminder (e.g., mark as completed)
+  updateReminder(vehicleId: string | number, reminderId: number, reminderData: any): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/${vehicleId}/reminders/${reminderId}/`, reminderData);
+  }
 }
