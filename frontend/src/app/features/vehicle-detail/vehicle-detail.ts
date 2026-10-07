@@ -6,6 +6,7 @@ import { VehicleService, Vehicle } from '../../services/vehicle.service';
 import { SupabaseService } from '../../services/supabase.service'; // Required for document upload
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal';
 
 export interface ServiceRecord {
   id: number;
@@ -42,7 +43,7 @@ export interface VehicleReminder {
 @Component({
   selector: 'app-vehicle-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, BottomNav, RippleLoader],
+  imports: [CommonModule, FormsModule, RouterLink, BottomNav, RippleLoader, ConfirmModalComponent],
   templateUrl: './vehicle-detail.html'
 })
 export class VehicleDetailComponent implements OnInit {
@@ -150,47 +151,54 @@ export class VehicleDetailComponent implements OnInit {
   }
 
   deleteService(serviceId: number): void {
-    if (confirm('Are you sure you want to delete this service record?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteService(vehicleId, serviceId).subscribe({
-        next: () => {
-          this.services.update(services => services.filter(s => s.id !== serviceId));
-        },
-        error: (err) => console.error('Failed to delete service', err)
-      });
-    }
+    this.openModal(
+      'Delete service record?', 
+      'This action cannot be undone.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteService(vehicleId, serviceId).subscribe({
+          next: () => this.services.update(s => s.filter(svc => svc.id !== serviceId)),
+          error: (err) => console.error('Failed to delete service', err)
+        });
+      }
+    );
   }
 
   deleteDocument(docId: number): void {
-    if (confirm('Are you sure you want to delete this document?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteDocument(vehicleId, docId).subscribe({
-        next: () => {
-          this.documents.update(docs => docs.filter(d => d.id !== docId));
-        },
-        error: (err) => console.error('Failed to delete document', err)
-      });
-    }
+    this.openModal(
+      'Delete document?', 
+      'This will remove the document from your records.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteDocument(vehicleId, docId).subscribe({
+          next: () => this.documents.update(d => d.filter(doc => doc.id !== docId)),
+          error: (err) => console.error('Failed to delete document', err)
+        });
+      }
+    );
   }
 
   goBack() {
     this.router.navigate(['/vehicles']);
   }
 
-  deleteVehicle() {
-    const id = this.vehicle()?.id;
-    if (!id) return;
-    if (confirm('Are you sure you want to remove this vehicle?')) {
-      this.vehicleService.deleteVehicle(id).subscribe({
-        next: () => this.router.navigate(['/vehicles']),
-        error: (err) => console.error('Failed to delete vehicle', err)
-      });
-    }
+  deleteVehicle(): void {
+    this.openModal(
+      'Remove vehicle?', 
+      'This will permanently delete this vehicle and all its associated records.',
+      () => {
+        const id = this.vehicle()?.id;
+        if (!id) return;
+        this.vehicleService.deleteVehicle(id).subscribe({
+          next: () => this.router.navigate(['/vehicles']),
+          error: (err) => console.error('Failed to delete vehicle', err)
+        });
+      }
+    );
   }
+
 
   // --- Document Upload Logic ---
 
@@ -315,19 +323,19 @@ export class VehicleDetailComponent implements OnInit {
   }
 
   deleteReminder(reminderId: number): void {
-    if (confirm('Are you sure you want to delete this reminder?')) {
-      const vehicleId = this.vehicle()?.id;
-      if (!vehicleId) return;
-
-      this.vehicleService.deleteReminder(vehicleId, reminderId).subscribe({
-        next: () => {
-          this.reminders.update(reminders => reminders.filter(r => r.id !== reminderId));
-        },
-        error: (err) => console.error('Failed to delete reminder', err)
-      });
-    }
+    this.openModal(
+      'Delete reminder?', 
+      'This reminder will be permanently removed.',
+      () => {
+        const vehicleId = this.vehicle()?.id;
+        if (!vehicleId) return;
+        this.vehicleService.deleteReminder(vehicleId, reminderId).subscribe({
+          next: () => this.reminders.update(r => r.filter(rem => rem.id !== reminderId)),
+          error: (err) => console.error('Failed to delete reminder', err)
+        });
+      }
+    );
   }
-
   resetReminderForm(): void {
     this.showReminderForm.set(false);
     this.reminderTitle = '';
@@ -340,5 +348,57 @@ export class VehicleDetailComponent implements OnInit {
   formatReminderDate(dateStr: string | null): string {
     if (!dateStr) return 'No date set';
     return new Date(dateStr).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+    toggleReminderCompletion(reminder: VehicleReminder): void {
+    const vehicleId = this.vehicle()?.id;
+    if (!vehicleId) return;
+
+    // 1. Optimistic UI update (flip the status instantly)
+    const newStatus = !reminder.is_completed;
+    this.reminders.update(reminders => 
+      reminders.map(r => r.id === reminder.id ? { ...r, is_completed: newStatus } : r)
+    );
+
+    // 2. Send to backend
+    this.vehicleService.updateReminder(vehicleId, reminder.id, { is_completed: newStatus }).subscribe({
+      error: (err) => {
+        console.error('Failed to update reminder', err);
+        // Revert UI if the backend fails
+        this.reminders.update(reminders => 
+          reminders.map(r => r.id === reminder.id ? { ...r, is_completed: reminder.is_completed } : r)
+        );
+      }
+    });
+  }
+
+    // Modal State
+  modalState = signal({
+    isOpen: false,
+    title: '',
+    message: '',
+    action: null as (() => void) | null,
+    isDestructive: true
+  });
+
+  openModal(title: string, message: string, action: () => void, isDestructive = true): void {
+    this.modalState.set({
+      isOpen: true,
+      title,
+      message,
+      action,
+      isDestructive
+    });
+  }
+
+  closeModal(): void {
+    this.modalState.update(state => ({ ...state, isOpen: false, action: null }));
+  }
+
+  handleModalConfirm(): void {
+    if (this.modalState().action) {
+      this.modalState().action!(); // Execute the delete logic
+    }
+    this.closeModal();
   }
 }

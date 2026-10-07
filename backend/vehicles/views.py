@@ -83,7 +83,7 @@ class ReminderListCreateView(generics.ListCreateAPIView):
         vehicle = Vehicle.objects.get(id=vehicle_id, owner=self.request.user)
         serializer.save(owner=self.request.user, vehicle=vehicle)
 
-class ReminderDestroyView(generics.DestroyAPIView):
+class ReminderDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ReminderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
