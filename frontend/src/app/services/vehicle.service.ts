@@ -107,4 +107,9 @@ export class VehicleService {
   getAllServices(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/services/`); 
   }
+
+    // Get ALL reminders for the current user (for the Home page)
+  getAllReminders(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/reminders/`);
+  }
 }
