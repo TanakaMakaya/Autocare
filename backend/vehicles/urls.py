@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:vehicle_id>/documents/<int:pk>/', DocumentDeleteView.as_view(), name='document-delete'),
     path('<int:vehicle_id>/reminders/', ReminderListCreateView.as_view(), name='reminder-list'),
     path('<int:vehicle_id>/reminders/<int:pk>/', ReminderDetailView.as_view(), name='reminder-detail')
+    
 ]

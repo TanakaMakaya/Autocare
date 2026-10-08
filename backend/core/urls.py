@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.http import HttpResponse, JsonResponse
 from django.urls import path, include
 from vehicles.views import UserServicesView
+from vehicles.views import UserRemindersView
 
 
 # Simple welcome view
@@ -27,5 +28,6 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('api/vehicles/', include('vehicles.urls')), # Add later
     path('api/services/', UserServicesView.as_view(), name='user-services'),
+     path('api/reminders/', UserRemindersView.as_view(), name='user-reminders'), 
 
 ]

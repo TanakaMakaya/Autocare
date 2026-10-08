@@ -97,3 +97,11 @@ class UserServicesView(generics.ListAPIView):
     def get_queryset(self):
         # Returns ALL services for the logged-in user, ordered by date (newest first)
         return ServiceRecord.objects.filter(owner=self.request.user).order_by('-date')
+
+class UserRemindersView(generics.ListAPIView):
+    serializer_class = ReminderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Returns ALL reminders for the user, ordered by due date
+        return Reminder.objects.filter(owner=self.request.user).order_by('due_date')
