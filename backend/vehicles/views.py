@@ -89,3 +89,11 @@ class ReminderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Reminder.objects.filter(owner=self.request.user)
+
+class UserServicesView(generics.ListAPIView):
+    serializer_class = ServiceRecordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Returns ALL services for the logged-in user, ordered by date (newest first)
+        return ServiceRecord.objects.filter(owner=self.request.user).order_by('-date')
