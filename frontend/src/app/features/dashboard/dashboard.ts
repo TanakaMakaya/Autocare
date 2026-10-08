@@ -1,98 +1,101 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { RouterLink } from '@angular/router';
+import { VehicleService, Vehicle } from '../../services/vehicle.service';
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
+import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
+
+export interface Reminder {
+  id: number;
+  title: string;
+  due_date: string;
+  is_completed: boolean;
+  vehicle_name?: string;
+}
+
+export interface ServiceRecord {
+  id: number;
+  service_type: string;
+  custom_name: string | null;
+  date: string;
+  total_cost: number;
+  vehicle_name?: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BottomNav],
+  imports: [CommonModule, RouterLink, BottomNav, RippleLoader],
   templateUrl: './dashboard.html'
 })
-export class DashboardComponent implements OnInit {
-  user: any = null;
-  stats = {
-    totalSpend: 16340,
-    monthlyAvg: 1816,
-    avgPerVehicle: 5447,
-    vehicleCount: 3,
-    servicesLogged: 5
-  };
+export class Dashboard implements OnInit {
+  vehicles = signal<Vehicle[]>([]);
+  services = signal<ServiceRecord[]>([]);
+  reminders = signal<Reminder[]>([]);
+  isLoading = signal(true);
 
-  vehicles = [
-    {
-      id: 1,
-      name: 'Renault Sandero Stepway',
-      year: 2017,
-      registration: 'AB12CDGP',
-      mileage: 215000,
-      status: 'attention',
-      statusLabel: 'Attention',
-      nextService: 'Oil change'
-    },
-    {
-      id: 2,
-      name: 'Toyota Hilux D-4D',
-      year: 2019,
-      registration: 'GH34MNRT',
-      mileage: 98400,
-      status: 'due-soon',
-      statusLabel: 'Due soon',
-      nextService: 'Next service'
-    },
-    {
-      id: 3,
-      name: 'Volkswagen Caddy',
-      year: 2021,
-      registration: 'JK56UVWX',
-      mileage: 41200,
-      status: 'up-to-date',
-      statusLabel: 'Up to date',
-      nextService: 'Roadworthy certificate'
-    }
-  ];
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setTimeout(() => {
-        this.isLoading = false;
-        this.user = {
-          first_name: 'Admin',
-          email: localStorage.getItem('user_email') || 'admin@autocare.com'
-        };
-      }, 500);
-    }
+  // Computed Stats
+  today = new Date();
+  thirtyDaysFromNow = new Date();
+  
+  constructor(private vehicleService: VehicleService) {
+    this.thirtyDaysFromNow.setDate(this.today.getDate() + 30);
   }
 
-  isLoading = true;
+  overdueReminders = computed(() => {
+    const todayStr = this.today.toISOString().split('T')[0];
+    return this.reminders().filter(r => !r.is_completed && r.due_date < todayStr);
+  });
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/auth/get-started']);
+  dueSoonReminders = computed(() => {
+    const todayStr = this.today.toISOString().split('T')[0];
+    const soonStr = this.thirtyDaysFromNow.toISOString().split('T')[0];
+    return this.reminders().filter(r => !r.is_completed && r.due_date >= todayStr && r.due_date <= soonStr);
+  });
+
+  recentServices = computed(() => {
+    return this.services().slice(0, 3); // Get the 3 most recent
+  });
+
+  yearlySpend = computed(() => {
+    const currentYear = this.today.getFullYear().toString();
+    return this.services()
+      .filter(s => s.date.startsWith(currentYear))
+      .reduce((sum, s) => sum + Number(s.total_cost), 0);
+  });
+
+  ngOnInit(): void {
+    this.loadDashboardData();
   }
 
-getStatusColor(status: string): string {
-  switch(status) {
-    case 'attention': return 'bg-red-100 text-red-700 border border-red-200';
-    case 'due-soon': return 'bg-amber-100 text-amber-700 border border-amber-200';
-    case 'up-to-date': return 'bg-green-100 text-green-700 border border-green-200';
-    default: return 'bg-gray-100 text-gray-700 border border-gray-200';
+  loadDashboardData(): void {
+    this.isLoading.set(true);
+    
+    // Fetch all data in parallel
+    Promise.all([
+      this.vehicleService.getVehicles().toPromise(),
+      this.vehicleService.getAllServices().toPromise(),
+      this.vehicleService.getAllReminders().toPromise()
+    ]).then(([vehicles, services, reminders]) => {
+      this.vehicles.set(vehicles || []);
+      this.services.set(services || []);
+      this.reminders.set(reminders || []);
+      this.isLoading.set(false);
+    }).catch(err => {
+      console.error('Failed to load dashboard', err);
+      this.isLoading.set(false);
+    });
   }
-}
 
-  getDotColor(status: string): string {
-    switch(status) {
-      case 'attention': return 'bg-red-500';
-      case 'due-soon': return 'bg-amber-500';
-      case 'up-to-date': return 'bg-green-500';
-      default: return 'bg-gray-500';
-    }
+  formatCurrency(amount: number): string {
+    return `R ${amount.toLocaleString()}`;
+  }
+
+  formatDate(dateStr: string): string {
+    return new Date(dateStr).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' });
+  }
+
+  getServiceName(service: ServiceRecord): string {
+    return service.custom_name || service.service_type;
   }
 }
