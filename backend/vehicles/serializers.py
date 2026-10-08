@@ -17,15 +17,17 @@ class VehicleSerializer(serializers.ModelSerializer):
         return f"{obj.owner.first_name} {obj.owner.last_name}"
 
 class ServiceRecordSerializer(serializers.ModelSerializer):
+    # Add this line to include the vehicle name in the JSON response
+    vehicle_name = serializers.CharField(source='vehicle.name', read_only=True)
+
     class Meta:
         model = ServiceRecord
         fields = [
-            'id', 'vehicle', 'service_type', 'custom_name', 'date', 
+            'id', 'vehicle', 'vehicle_name', 'service_type', 'custom_name', 'date', 
             'mileage', 'parts_cost', 'labor_cost', 'total_cost', 
             'notes', 'invoice_url', 'created_at'
         ]
         read_only_fields = ['owner', 'created_at', 'vehicle']
-
 
 class VehicleDocumentSerializer(serializers.ModelSerializer):
     class Meta:

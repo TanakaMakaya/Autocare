@@ -102,4 +102,9 @@ export class VehicleService {
   updateReminder(vehicleId: string | number, reminderId: number, reminderData: any): Observable<any> {
     return this.http.patch<any>(`${this.baseUrl}/${vehicleId}/reminders/${reminderId}/`, reminderData);
   }
+
+    // Get ALL services for the current user (for the Costs page)
+  getAllServices(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/services/`); 
+  }
 }
