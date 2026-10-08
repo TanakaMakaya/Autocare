@@ -65,6 +65,19 @@ export class VehicleDetailComponent implements OnInit {
       .reduce((sum, s) => sum + Number(s.total_cost), 0);
   });
 
+  // Dynamic "Next up" reminder
+  nextUp = computed(() => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    const upcoming = this.reminders()
+      // 1. Filter out completed reminders and ones without a due date
+      .filter(r => !r.is_completed && !!r.due_date && r.due_date >= todayStr)
+      // 2. Safely sort by date (TypeScript now knows it's a string)
+      .sort((a, b) => (a.due_date as string).localeCompare(b.due_date as string));
+
+    return upcoming.length > 0 ? upcoming[0].title : 'All caught up!';
+  });
+
   // Documents State
   documents = signal<VehicleDocument[]>([]);
   isDocumentsLoading = signal(false);
