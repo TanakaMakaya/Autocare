@@ -101,8 +101,7 @@
         </svg>
       </button>
     </div>
-
-    <!-- 5. Logout Button -->
+    <!-- Sign Out Button (Existing) -->
     <button 
       (click)="logout()"
       class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-4 rounded-2xl transition duration-200 border border-red-200 flex items-center justify-center space-x-2"
@@ -114,6 +113,16 @@
     </button>
 
   </main>
+
+  <!-- Add Custom Confirmation Modal Here -->
+  <app-confirm-modal
+    [isOpen]="modalState().isOpen"
+    [title]="modalState().title"
+    [message]="modalState().message"
+    [isDestructive]="modalState().isDestructive"
+    (confirmed)="handleModalConfirm()"
+    (cancelled)="closeModal()"
+  ></app-confirm-modal>
 
   <!-- Bottom Navigation -->
   <app-bottom-nav></app-bottom-nav>
