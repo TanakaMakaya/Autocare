@@ -42,5 +42,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/log-service/log-service').then(m => m.LogServiceComponent),
     canActivate: [authGuard] 
   },
+    { 
+    path: 'documents', 
+    loadComponent: () => import('./features/documents/documents').then(m => m.DocumentsComponent), // We'll build this next!
+    canActivate: [authGuard] 
+  },
   { path: '**', redirectTo: 'auth/get-started' }
 ];

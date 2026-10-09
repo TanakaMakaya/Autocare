@@ -1,74 +1,92 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { VehicleService } from '../../services/vehicle.service';
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
-
-
-export interface Reminder {
-  id: number;
-  title: string;
-  vehicleName: string;
-  dueDate: string;
-  status: 'urgent' | 'soon' | 'upcoming';
-  type: 'service' | 'license' | 'insurance';
-}
+import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
 
 @Component({
   selector: 'app-reminders',
   standalone: true,
-  imports: [CommonModule, BottomNav],
+  imports: [CommonModule, RouterLink, BottomNav, RippleLoader],
   templateUrl: './reminders.html'
 })
-export class Reminders {
-  // Mock data for now
-  reminders = signal<Reminder[]>([
-    {
-      id: 1,
-      title: 'License Disc Renewal',
-      vehicleName: 'Renault Sandero Stepway',
-      dueDate: 'Expires in 14 days',
-      status: 'urgent',
-      type: 'license'
-    },
-    {
-      id: 2,
-      title: 'Oil Change & Filter',
-      vehicleName: 'Toyota Hilux D-4D',
-      dueDate: 'Due in 500 km',
-      status: 'soon',
-      type: 'service'
-    },
-    {
-      id: 3,
-      title: 'Insurance Premium',
-      vehicleName: 'Volkswagen Caddy',
-      dueDate: 'Due on 15 Oct 2026',
-      status: 'upcoming',
-      type: 'insurance'
-    },
-    {
-      id: 4,
-      title: 'Brake Pad Inspection',
-      vehicleName: 'Renault Sandero Stepway',
-      dueDate: 'Due in 2,000 km',
-      status: 'upcoming',
-      type: 'service'
-    }
-  ]);
+export class Reminders implements OnInit {
+  reminders = signal<any[]>([]);
+  isLoading = signal(true);
+
+  // Date helpers
+  today = new Date();
+  thirtyDaysFromNow = new Date(this.today.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+  constructor(private vehicleService: VehicleService) {}
+
+  ngOnInit(): void {
+    this.loadReminders();
+  }
+
+  loadReminders(): void {
+    this.isLoading.set(true);
+    this.vehicleService.getAllReminders().subscribe({
+      next: (data) => {
+        this.reminders.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load reminders', err);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  // --- Computed Data ---
+  
+  // Maps raw data to the shape your HTML expects and sorts it
+  mappedReminders = computed(() => {
+    const todayStr = this.today.toISOString().split('T')[0];
+    const soonStr = this.thirtyDaysFromNow.toISOString().split('T')[0];
+
+    return this.reminders()
+      .map(r => {
+        let status = 'upcoming';
+        if (r.is_completed) status = 'completed';
+        else if (r.due_date && r.due_date < todayStr) status = 'urgent';
+        else if (r.due_date && r.due_date <= soonStr) status = 'due-soon';
+
+        return {
+          ...r,
+          status,
+          vehicleName: r.vehicle_name || 'Unknown Vehicle',
+          dueDate: r.due_date 
+            ? new Date(r.due_date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' }) 
+            : 'No date set'
+        };
+      })
+      .sort((a, b) => {
+        // Sort priority: Urgent -> Due Soon -> Upcoming -> Completed
+        const priority: any = { 'urgent': 1, 'due-soon': 2, 'upcoming': 3, 'completed': 4 };
+        return priority[a.status] - priority[b.status] || (a.due_date || '').localeCompare(b.due_date || '');
+      });
+  });
+
+  urgentCount = computed(() => this.mappedReminders().filter(r => r.status === 'urgent').length);
+  dueSoonCount = computed(() => this.mappedReminders().filter(r => r.status === 'due-soon').length);
+  upcomingCount = computed(() => this.mappedReminders().filter(r => r.status === 'upcoming').length);
+
+  // --- UI Helpers ---
 
   getIcon(type: string): string {
-    switch(type) {
-      case 'license': return 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
-      case 'insurance': return 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z';
-      default: return 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z';
-    }
+    // Since we don't have a 'type' field yet, we return a standard bell icon path
+    return "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9";
   }
 
   getStatusColor(status: string): string {
-    switch(status) {
-      case 'urgent': return 'bg-red-100 text-red-700 border-red-200';
-      case 'soon': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'upcoming': return 'bg-blue-100 text-blue-700 border-blue-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+    switch (status) {
+      case 'urgent': return 'bg-red-50 text-red-600 border-red-100';
+      case 'due-soon': return 'bg-amber-50 text-amber-600 border-amber-100';
+      case 'upcoming': return 'bg-blue-50 text-blue-600 border-blue-100';
+      case 'completed': return 'bg-gray-50 text-gray-500 border-gray-100 line-through';
+      default: return 'bg-gray-50 text-gray-600 border-gray-100';
     }
   }
 }

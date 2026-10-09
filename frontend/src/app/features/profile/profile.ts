@@ -1,49 +1,76 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service'; // Adjust path if needed
+import { VehicleService } from '../../services/vehicle.service';
 import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, BottomNav],
+  imports: [CommonModule, RouterLink, BottomNav],
   templateUrl: './profile.html'
 })
 export class Profile implements OnInit {
-  user = signal<{ email: string; name: string } | null>(null);
+  // App Info
   appVersion = '1.0.0';
-  documentCount = signal(3); // Mock count for now
+
+  // User State (We'll pull this from your Auth service or local storage)
+  user = signal<{ name: string, email: string } | null>(null);
+  
+  // Documents State
+  documents = signal<any[]>([]);
+  documentCount = computed(() => this.documents().length);
 
   constructor(
-    private authService: AuthService,
+    private authService: AuthService, 
+    private vehicleService: VehicleService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Get user info from local storage (or your auth service)
-    const email = localStorage.getItem('user_email') || 'user@autocare.com';
-    const name = localStorage.getItem('user_name') || 'AutoCare User';
-    
-    this.user.set({ email, name });
+    this.loadUserProfile();
+    this.loadGlobalDocuments();
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/auth/get-started']);
+  loadUserProfile(): void {
+    // TODO: Replace this with your actual Auth Service user getter
+    // Example: this.user.set(this.authService.getCurrentUser());
+    
+    // Placeholder for now so the UI looks good:
+    this.user.set({ name: 'Tanaka', email: 'tanaka@example.com' });
+  }
+
+  loadGlobalDocuments(): void {
+    // We will create this method in your VehicleService next!
+    // For now, it just sets an empty array so the UI doesn't break
+    this.vehicleService.getAllDocuments().subscribe({
+      next: (data) => this.documents.set(data),
+      error: (err) => console.error('Failed to load global docs', err)
+    });
+  }
+
+  // --- Actions ---
+
+  viewAllDocuments(): void {
+    this.router.navigate(['/documents']);
   }
 
   openTicket(): void {
-    window.location.href = 'mailto:support@autocare.com?subject=Support Ticket';
+    // Opens user's email client with pre-filled subject
+    window.location.href = 'mailto:support@autocare.com?subject=AutoCare Support Ticket&body=Hi AutoCare Team,%0D%0A%0D%0AI need help with...';
   }
 
   suggestFeature(): void {
-    window.location.href = 'mailto:feedback@autocare.com?subject=Feature Suggestion';
+    // Opens user's email client with pre-filled subject
+    window.location.href = 'mailto:feedback@autocare.com?subject=AutoCare Feature Suggestion&body=Hi AutoCare Team,%0D%0A%0D%0AI would love to see a feature that...';
   }
 
-  viewAllDocuments(): void {
-    // Placeholder for future navigation to a dedicated Documents page
-    console.log('Navigate to all documents');
-    // this.router.navigate(['/documents']); 
+  logout(): void {
+    // Use your custom modal here if you want, or a simple confirm
+    if (confirm('Are you sure you want to log out?')) {
+      this.authService.logout(); // Ensure this method exists in your auth service
+      this.router.navigate(['/auth/login']);
+    }
   }
 }

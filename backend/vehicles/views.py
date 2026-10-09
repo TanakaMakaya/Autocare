@@ -105,3 +105,10 @@ class UserRemindersView(generics.ListAPIView):
     def get_queryset(self):
         # Returns ALL reminders for the user, ordered by due date
         return Reminder.objects.filter(owner=self.request.user).order_by('due_date')
+
+class UserDocumentsView(generics.ListAPIView):
+    serializer_class = VehicleDocumentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return VehicleDocument.objects.filter(owner=self.request.user).order_by('-created_at')
