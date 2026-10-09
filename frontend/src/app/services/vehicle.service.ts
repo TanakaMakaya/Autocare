@@ -112,4 +112,9 @@ export class VehicleService {
   getAllReminders(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/reminders/`);
   }
+
+    // Get ALL documents for the current user (for the Profile page)
+  getAllDocuments(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/documents/`);
+  }
 }

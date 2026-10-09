@@ -1,0 +1,89 @@
+<div class="min-h-screen bg-gray-50 pb-24">
+  <!-- Header with Back Button -->
+  <header class="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40 flex items-center">
+    <button (click)="goBack()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition mr-3">
+      <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    <div>
+      <h1 class="text-xl font-bold text-gray-900">My Documents</h1>
+      <p class="text-sm text-gray-500 mt-0.5">All your vehicle files in one place</p>
+    </div>
+  </header>
+
+  <main class="px-4 py-6 max-w-2xl mx-auto">
+    
+    @if (isLoading()) {
+      <div class="flex justify-center py-12"><app-ripple-loader size="md" class="text-gray-900"></app-ripple-loader></div>
+    } @else {
+
+      <!-- Dropdown Filter -->
+      <div class="relative mb-6">
+        <select 
+          (change)="setFilter($any($event.target).value)" 
+          class="w-full appearance-none bg-white border border-gray-200 text-gray-900 rounded-2xl px-5 py-3.5 font-bold shadow-sm focus:outline-none focus:border-gray-900 transition pr-10 cursor-pointer"
+        >
+          <option value="all">All Vehicles ({{ documents().length }})</option>
+          @for (vehicle of vehicles(); track vehicle.id) {
+            <option [value]="vehicle.id">{{ vehicle.manufacturer }} {{ vehicle.model }}</option>
+          }
+        </select>
+        
+        <!-- Custom Chevron Icon for the Dropdown -->
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Documents List -->
+      @if (filteredDocuments().length === 0) {
+        <div class="text-center py-16 bg-white rounded-3xl border border-gray-200 shadow-sm">
+          <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">No documents found</h3>
+          <p class="text-sm text-gray-500">Upload documents from your vehicle's detail page.</p>
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (doc of filteredDocuments(); track doc.id) {
+            <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-center space-x-4">
+              
+              <!-- Icon -->
+              <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getFileIcon(doc.category)"/>
+                </svg>
+              </div>
+
+              <!-- Content -->
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-gray-900 truncate">{{ doc.title }}</h4>
+                <p class="text-xs text-gray-500 mt-0.5">
+                  {{ doc.category }} · {{ doc.vehicle_name }}
+                </p>
+                <p class="text-xs text-gray-400 mt-1">{{ formatDate(doc.created_at) }}</p>
+              </div>
+
+              <!-- View Button -->
+              <button 
+                (click)="openDocument(doc.file_url)" 
+                class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition shrink-0"
+              >
+                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    }
+  </main>
+
+  <!-- Bottom Navigation -->
+  <app-bottom-nav></app-bottom-nav>
+</div>
