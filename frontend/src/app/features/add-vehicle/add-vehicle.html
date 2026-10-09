@@ -117,6 +117,7 @@
           <input 
             type="text" 
             [(ngModel)]="registration_number" 
+             (ngModelChange)="registration_number = $event.toUpperCase()" 
             name="registration_number" 
             required
             placeholder="AB12CDGP"
