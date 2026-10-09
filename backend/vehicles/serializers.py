@@ -41,3 +41,13 @@ class ReminderSerializer(serializers.ModelSerializer):
         model = Reminder
         fields = ['id', 'vehicle', 'title', 'due_date', 'due_mileage', 'notes', 'is_completed', 'created_at']
         read_only_fields = ['owner', 'created_at', 'vehicle'] # Prevents 400 errors
+
+class ReminderSerializer(serializers.ModelSerializer):
+    # Add these two lines to include vehicle details
+    vehicle_name = serializers.CharField(source='vehicle.name', read_only=True)
+    vehicle_reg = serializers.CharField(source='vehicle.registration_number', read_only=True)
+
+    class Meta:
+        model = Reminder
+        fields = ['id', 'vehicle', 'vehicle_name', 'vehicle_reg', 'title', 'due_date', 'due_mileage', 'notes', 'is_completed', 'created_at']
+        read_only_fields = ['owner', 'created_at', 'vehicle']
