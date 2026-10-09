@@ -8,14 +8,14 @@ import { BottomNav } from '../../shared/bottom-nav/bottom-nav';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, BottomNav],
+  imports: [CommonModule, BottomNav],
   templateUrl: './profile.html'
 })
 export class Profile implements OnInit {
   // App Info
   appVersion = '1.0.0';
 
-  // User State (We'll pull this from your Auth service or local storage)
+  
   user = signal<{ name: string, email: string } | null>(null);
   
   // Documents State
