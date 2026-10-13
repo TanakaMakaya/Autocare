@@ -1,42 +1,42 @@
-<div class="min-h-screen bg-gray-50 pb-24">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 transition-colors duration-300">
   
   <!-- Loading State -->
   @if (isLoading()) {
-    <div class="flex flex-col items-center justify-center h-screen">
-      <app-ripple-loader size="md" class="text-gray-900 mb-4"></app-ripple-loader>
+    <div class="flex flex-col items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <app-ripple-loader size="md" class="text-gray-900 dark:text-white mb-4"></app-ripple-loader>
     </div>
   }
 
   @if (!isLoading() && vehicle()) {
     
     <!-- 1. Top Header -->
-    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-linear-to-b from-gray-100 to-gray-50">
+    <div class="px-4 pt-4 pb-2 flex items-center justify-between bg-linear-to-b from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900 transition-colors duration-300">
       <div class="flex items-center space-x-3">
-        <button (click)="goBack()" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-900 hover:bg-gray-50 transition">
+        <button (click)="goBack()" class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-sm flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
         <div>
-          <p class="text-[10px] font-bold text-gray-500 tracking-wider uppercase">{{ vehicle()!.registration_number }}</p>
-          <h1 class="text-xl font-bold text-gray-900 truncate max-w-35">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
+          <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tracking-wider uppercase">{{ vehicle()!.registration_number }}</p>
+          <h1 class="text-xl font-bold text-gray-900 dark:text-white truncate max-w-35">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h1>
         </div>
       </div>
-      <button routerLink="/vehicles/{{ vehicle()!.id }}/log-service" class="bg-gray-900 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
+      <button routerLink="/vehicles/{{ vehicle()!.id }}/log-service" class="bg-gray-900 dark:bg-gray-700 text-white px-4 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 dark:hover:bg-gray-600 transition">
         + Add service
       </button>
     </div>
 
     <!-- 2. Main Vehicle Card -->
     <div class="px-4 mb-6">
-      <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
         <!-- Vehicle Image -->
         <div class="mb-5">
           @if (vehicle()!.photo_url) {
-            <img [src]="vehicle()!.photo_url" class="w-full h-48 object-cover rounded-2xl bg-gray-100" alt="Vehicle">
+            <img [src]="vehicle()!.photo_url" class="w-full h-48 object-cover rounded-2xl bg-gray-100 dark:bg-gray-700" alt="Vehicle">
           } @else {
-            <div class="w-full h-48 bg-gray-100 rounded-2xl flex items-center justify-center">
-              <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 rounded-2xl flex items-center justify-center transition-colors duration-300">
+              <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
               </svg>
@@ -46,40 +46,40 @@
 
         <!-- Title & Status -->
         <div class="flex justify-between items-start mb-1">
-          <h2 class="text-2xl font-bold text-gray-900">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h2>
-          <span class="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-sm font-bold flex items-center border border-red-100">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ vehicle()!.manufacturer }} {{ vehicle()!.model }}</h2>
+          <span class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-full text-sm font-bold flex items-center border border-red-100 dark:border-red-800 transition-colors duration-300">
             <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
             Attention
           </span>
         </div>
-        <p class="text-gray-500 text-lg mb-6">{{ vehicle()!.year }} · {{ vehicle()!.registration_number }}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-lg mb-6">{{ vehicle()!.year }} · {{ vehicle()!.registration_number }}</p>
 
-        <!-- Details List (Fixed nesting) -->
+        <!-- Details List -->
         <div class="space-y-4">
           <div class="flex justify-between items-center">
-            <span class="text-gray-500">VIN</span>
-            <span class="font-bold text-gray-900 font-mono text-sm">{{ vehicle()!.vin || 'N/A' }}</span>
+            <span class="text-gray-500 dark:text-gray-400">VIN</span>
+            <span class="font-bold text-gray-900 dark:text-white font-mono text-sm">{{ vehicle()!.vin || 'N/A' }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-gray-500">Odometer</span>
-            <span class="font-bold text-gray-900">{{ vehicle()!.mileage | number:'1.0-0' }} km</span>
+            <span class="text-gray-500 dark:text-gray-400">Odometer</span>
+            <span class="font-bold text-gray-900 dark:text-white">{{ vehicle()!.mileage | number:'1.0-0' }} km</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-gray-500">Spent this year</span>
-            <span class="font-bold text-gray-900">{{ formatCurrency(thisYearSpend()) }}</span>
+            <span class="text-gray-500 dark:text-gray-400">Spent this year</span>
+            <span class="font-bold text-gray-900 dark:text-white">{{ formatCurrency(thisYearSpend()) }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-gray-500">Lifetime spend</span>
-            <span class="font-bold text-gray-900">{{ formatCurrency(lifetimeSpend()) }}</span>
+            <span class="text-gray-500 dark:text-gray-400">Lifetime spend</span>
+            <span class="font-bold text-gray-900 dark:text-white">{{ formatCurrency(lifetimeSpend()) }}</span>
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-gray-500">Next up</span>
-             <span class="font-bold text-amber-700">{{ nextUp() }}</span>
+            <span class="text-gray-500 dark:text-gray-400">Next up</span>
+             <span class="font-bold text-amber-700 dark:text-amber-400">{{ nextUp() }}</span>
           </div>
         </div>
 
-            <!-- Edit Button (NEW) -->
-        <button [routerLink]="'/vehicles/' + vehicle()!.id + '/edit'" class="w-full mb-3 bg-gray-100 text-gray-900 py-3.5 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-gray-200 transition border border-gray-200">
+        <!-- Edit Button -->
+        <button [routerLink]="'/vehicles/' + vehicle()!.id + '/edit'" class="w-full mb-3 mt-6 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white py-3.5 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition border border-gray-200 dark:border-gray-600">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
           </svg>
@@ -87,7 +87,7 @@
         </button>
 
         <!-- Remove Button -->
-        <button (click)="deleteVehicle()" class="w-full mt-6 bg-red-50 text-red-600 py-3.5 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-red-100 transition border border-red-100">
+        <button (click)="deleteVehicle()" class="w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 py-3.5 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-red-100 dark:hover:bg-red-900/40 transition border border-red-100 dark:border-red-800">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
@@ -102,49 +102,49 @@
       <!-- Maintenance Timeline Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-900">Maintenance timeline</h2>
-          <span class="text-sm text-gray-500 font-medium">{{ services().length }} records</span>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Maintenance timeline</h2>
+          <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ services().length }} records</span>
         </div>
 
         @if (isServicesLoading()) {
           <div class="flex justify-center py-8">
-            <app-ripple-loader size="sm" class="text-gray-900"></app-ripple-loader>
+            <app-ripple-loader size="sm" class="text-gray-900 dark:text-white"></app-ripple-loader>
           </div>
         } @else if (services().length === 0) {
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm text-center">
-            <p class="text-gray-500 mb-4">No service records yet.</p>
-            <a [routerLink]="'/vehicles/' + vehicle()!.id + '/log-service'" class="inline-block bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 transition">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm text-center transition-colors duration-300">
+            <p class="text-gray-500 dark:text-gray-400 mb-4">No service records yet.</p>
+            <a [routerLink]="'/vehicles/' + vehicle()!.id + '/log-service'" class="inline-block bg-gray-900 dark:bg-gray-700 text-white px-6 py-3 rounded-full text-sm font-bold shadow-md hover:bg-gray-800 dark:hover:bg-gray-600 transition">
               + Log your first service
             </a>
           </div>
         } @else {
           <div class="space-y-4 relative">
-            <div class="absolute left-5 top-4 bottom-4 w-0.5 bg-gray-200"></div>
+            <div class="absolute left-5 top-4 bottom-4 w-0.5 bg-gray-200 dark:bg-gray-700 transition-colors duration-300"></div>
             
             @for (service of services(); track service.id) {
-              <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative pl-16">
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm relative pl-16 transition-colors duration-300">
                 <!-- Timeline Dot -->
-                <div class="absolute left-3 top-6 w-4 h-4 bg-gray-900 rounded-full border-4 border-white shadow"></div>
+                <div class="absolute left-3 top-6 w-4 h-4 bg-gray-900 dark:bg-gray-500 rounded-full border-4 border-white dark:border-gray-800 shadow transition-colors duration-300"></div>
                 
                 <div class="flex justify-between items-start mb-2">
-                  <h3 class="font-bold text-gray-900 text-lg">{{ getServiceName(service) }}</h3>
+                  <h3 class="font-bold text-gray-900 dark:text-white text-lg">{{ getServiceName(service) }}</h3>
                   <div class="flex items-center space-x-3">
-                    <span class="font-bold text-gray-900">{{ formatCurrency(service.total_cost) }}</span>
+                    <span class="font-bold text-gray-900 dark:text-white">{{ formatCurrency(service.total_cost) }}</span>
                     <!-- Delete button -->
-                    <button (click)="deleteService(service.id)" class="text-gray-400 hover:text-red-500 transition">
+                    <button (click)="deleteService(service.id)" class="text-gray-400 dark:text-gray-500 hover:text-red-500 transition">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                   </div>
                 </div>
                 
-                <p class="text-sm text-gray-500 mb-3">{{ formatDate(service.date) }} · {{ formatMileage(service.mileage) }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ formatDate(service.date) }} · {{ formatMileage(service.mileage) }}</p>
                 
                 @if (service.notes) {
-                  <p class="text-sm text-gray-600 mb-3 italic">"{{ service.notes }}"</p>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 italic">"{{ service.notes }}"</p>
                 }
 
                 @if (service.invoice_url) {
-                  <a [href]="service.invoice_url" target="_blank" class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg flex items-center w-fit font-medium hover:bg-gray-200 transition">
+                  <a [href]="service.invoice_url" target="_blank" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs px-3 py-1.5 rounded-lg flex items-center w-fit font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                     <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
                     View Invoice
                   </a>
@@ -155,11 +155,11 @@
         }
       </section>
 
-            <!-- Reminders Section -->
+      <!-- Reminders Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-900">Reminders</h2>
-          <button (click)="showReminderForm.set(!showReminderForm())" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition flex items-center space-x-2">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Reminders</h2>
+          <button (click)="showReminderForm.set(!showReminderForm())" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold transition flex items-center space-x-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             <span>Add</span>
           </button>
@@ -167,32 +167,32 @@
 
         <!-- Add Reminder Form -->
         @if (showReminderForm()) {
-          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm mb-4">
-            <h3 class="font-bold text-gray-900 mb-4">New Reminder</h3>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm mb-4 transition-colors duration-300">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-4">New Reminder</h3>
             <div class="space-y-4">
-              <input type="text" [(ngModel)]="reminderTitle" placeholder="e.g., License Disc Renewal" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+              <input type="text" [(ngModel)]="reminderTitle" placeholder="e.g., License Disc Renewal" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition">
               
               <div class="grid grid-cols-2 gap-4">
-              <div>
-  <label class="text-xs text-gray-500 font-medium mb-1 block">Due Date (Optional)</label>
-  <input 
-    type="date" 
-    [(ngModel)]="reminderDate" 
-    [min]="today" 
-    class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition"
-  >
-</div>
                 <div>
-                  <label class="text-xs text-gray-500 font-medium mb-1 block">Due Mileage (Optional)</label>
-                  <input type="number" [(ngModel)]="reminderMileage" placeholder="km" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+                  <label class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1 block">Due Date (Optional)</label>
+                  <input 
+                    type="date" 
+                    [(ngModel)]="reminderDate" 
+                    [min]="today" 
+                    class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition"
+                  >
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1 block">Due Mileage (Optional)</label>
+                  <input type="number" [(ngModel)]="reminderMileage" placeholder="km" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition">
                 </div>
               </div>
 
-              <textarea [(ngModel)]="reminderNotes" rows="2" placeholder="Notes..." class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition resize-none"></textarea>
+              <textarea [(ngModel)]="reminderNotes" rows="2" placeholder="Notes..." class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition resize-none"></textarea>
 
               <div class="flex space-x-3 pt-2">
-                <button (click)="resetReminderForm()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl transition">Cancel</button>
-                <button (click)="submitReminder()" [disabled]="isSavingReminder()" class="flex-1 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center">
+                <button (click)="resetReminderForm()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-3 rounded-xl transition">Cancel</button>
+                <button (click)="submitReminder()" [disabled]="isSavingReminder()" class="flex-1 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center">
                   @if (isSavingReminder()) {
                     <app-ripple-loader size="sm" class="text-white"></app-ripple-loader>
                   } @else {
@@ -206,47 +206,52 @@
 
         <!-- Reminders List -->
         @if (isRemindersLoading()) {
-          <div class="flex justify-center py-8"><app-ripple-loader size="sm" class="text-gray-900"></app-ripple-loader></div>
+          <div class="flex justify-center py-8"><app-ripple-loader size="sm" class="text-gray-900 dark:text-white"></app-ripple-loader></div>
         } @else if (reminders().length === 0 && !showReminderForm()) {
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm text-center">
-            <p class="text-gray-500">No upcoming reminders.</p>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm text-center transition-colors duration-300">
+            <p class="text-gray-500 dark:text-gray-400">No upcoming reminders.</p>
           </div>
         } @else {
           <div class="space-y-3">
-                       @for (reminder of reminders(); track reminder.id) {
-              <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm relative group transition-all duration-300" 
+            @for (reminder of reminders(); track reminder.id) {
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm relative group transition-all duration-300" 
                    [class.opacity-60]="reminder.is_completed"
-                   [class.bg-gray-50]="reminder.is_completed">
+                   [class.bg-gray-50]="reminder.is_completed"
+                   [class.dark:bg-gray-700/50]="reminder.is_completed">
                 
                 <div class="flex items-start justify-between mb-2">
                   <div class="flex items-center space-x-3">
-                    <!-- ✅ NEW: Checkbox -->
+                    <!-- Checkbox -->
                     <input 
                       type="checkbox" 
                       [checked]="reminder.is_completed"
                       (change)="toggleReminderCompletion(reminder)"
-                      class="w-5 h-5 text-gray-900 border-gray-300 rounded focus:ring-gray-900 cursor-pointer mt-1"
+                      class="w-5 h-5 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 rounded focus:ring-gray-900 dark:focus:ring-gray-500 cursor-pointer mt-1"
                     >
                     
-                    <!-- ✅ NEW: Conditional styling for title -->
+                    <!-- Title -->
                     <h3 class="font-bold text-lg transition-all" 
                         [class.text-gray-900]="!reminder.is_completed" 
+                        [class.dark:text-white]="!reminder.is_completed"
                         [class.text-gray-500]="reminder.is_completed"
+                        [class.dark:text-gray-400]="reminder.is_completed"
                         [class.line-through]="reminder.is_completed">
                       {{ reminder.title }}
                     </h3>
                   </div>
                   
-                  <button (click)="deleteReminder(reminder.id)" class="text-gray-400 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
+                  <button (click)="deleteReminder(reminder.id)" class="text-gray-400 dark:text-gray-500 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                   </button>
                 </div>
                 
-                <div class="pl-8 space-y-1"> <!-- Increased padding-left to align with text -->
+                <div class="pl-8 space-y-1">
                   @if (reminder.due_date || reminder.due_mileage) {
                     <p class="text-sm transition-all" 
                        [class.text-gray-600]="!reminder.is_completed" 
-                       [class.text-gray-400]="reminder.is_completed">
+                       [class.dark:text-gray-300]="!reminder.is_completed"
+                       [class.text-gray-400]="reminder.is_completed"
+                       [class.dark:text-gray-500]="reminder.is_completed">
                       Due: 
                       @if (reminder.due_date) { <span class="font-medium">{{ formatReminderDate(reminder.due_date) }}</span> }
                       @if (reminder.due_date && reminder.due_mileage) { <span> · </span> }
@@ -256,7 +261,9 @@
                   @if (reminder.notes) {
                     <p class="text-sm italic transition-all"
                        [class.text-gray-500]="!reminder.is_completed"
-                       [class.text-gray-400]="reminder.is_completed">
+                       [class.dark:text-gray-400]="!reminder.is_completed"
+                       [class.text-gray-400]="reminder.is_completed"
+                       [class.dark:text-gray-500]="reminder.is_completed">
                       "{{ reminder.notes }}"
                     </p>
                   }
@@ -267,28 +274,28 @@
         }
       </section>
 
-           <!-- Documents Section -->
+      <!-- Documents Section -->
       <section>
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-gray-900">Documents</h2>
-          <button (click)="showUploadForm.set(!showUploadForm())" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-bold transition flex items-center space-x-2">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Documents</h2>
+          <button (click)="showUploadForm.set(!showUploadForm())" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold transition flex items-center space-x-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             <span>Upload</span>
           </button>
         </div>
 
-        <!-- Upload Form (Toggles visible) -->
+        <!-- Upload Form -->
         @if (showUploadForm()) {
-          <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm mb-4 animate-fade-in">
-            <h3 class="font-bold text-gray-900 mb-4">Upload New Document</h3>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm mb-4 transition-colors duration-300">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-4">Upload New Document</h3>
             
             <div class="space-y-4">
               <!-- File Input -->
               <div>
-                <label class="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl p-4 cursor-pointer hover:bg-gray-50 transition">
+                <label class="flex items-center justify-center w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                   <div class="flex items-center space-x-3">
-                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                    <span class="text-sm font-medium text-gray-700">{{ uploadFile ? uploadFile.name : 'Choose PDF or Image' }}</span>
+                    <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ uploadFile ? uploadFile.name : 'Choose PDF or Image' }}</span>
                   </div>
                   <input type="file" class="hidden" accept=".pdf,image/*" (change)="onFileSelected($event)">
                 </label>
@@ -296,8 +303,8 @@
 
               <!-- Title & Category -->
               <div class="grid grid-cols-2 gap-4">
-                <input type="text" [(ngModel)]="uploadTitle" placeholder="Document title (e.g., License Disc)" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
-                <select [(ngModel)]="uploadCategory" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:border-gray-900 focus:outline-none transition">
+                <input type="text" [(ngModel)]="uploadTitle" placeholder="Document title (e.g., License Disc)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition">
+                <select [(ngModel)]="uploadCategory" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-xl px-4 py-3 focus:border-gray-900 dark:focus:border-gray-400 focus:outline-none transition">
                   <option value="Registration">Registration</option>
                   <option value="Insurance">Insurance</option>
                   <option value="Service Invoice">Service Invoice</option>
@@ -308,8 +315,8 @@
 
               <!-- Actions -->
               <div class="flex space-x-3 pt-2">
-                <button (click)="resetUploadForm()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl transition">Cancel</button>
-                <button (click)="submitDocument()" [disabled]="isUploading()" class="flex-1 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center space-x-2">
+                <button (click)="resetUploadForm()" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-3 rounded-xl transition">Cancel</button>
+                <button (click)="submitDocument()" [disabled]="isUploading()" class="flex-1 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center space-x-2">
                   @if (isUploading()) {
                     <app-ripple-loader size="sm" class="text-white"></app-ripple-loader>
                     <span>Uploading...</span>
@@ -324,29 +331,29 @@
 
         <!-- Documents List -->
         @if (isDocumentsLoading()) {
-          <div class="flex justify-center py-8"><app-ripple-loader size="sm" class="text-gray-900"></app-ripple-loader></div>
+          <div class="flex justify-center py-8"><app-ripple-loader size="sm" class="text-gray-900 dark:text-white"></app-ripple-loader></div>
         } @else if (documents().length === 0 && !showUploadForm()) {
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm text-center">
-            <p class="text-gray-500">No documents uploaded yet.</p>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm text-center transition-colors duration-300">
+            <p class="text-gray-500 dark:text-gray-400">No documents uploaded yet.</p>
           </div>
         } @else {
           <div class="space-y-3">
             @for (doc of documents(); track doc.id) {
-              <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-center space-x-4 group">
-                <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
-                  <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm flex items-center space-x-4 group transition-colors duration-300">
+                <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300">
+                  <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                   </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h4 class="font-bold text-gray-900 truncate">{{ doc.title }}</h4>
-                  <p class="text-sm text-gray-500">{{ doc.category }}</p>
+                  <h4 class="font-bold text-gray-900 dark:text-white truncate">{{ doc.title }}</h4>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">{{ doc.category }}</p>
                 </div>
                 <div class="flex items-center space-x-2">
-                  <a [href]="doc.file_url" target="_blank" class="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition" title="View">
+                  <a [href]="doc.file_url" target="_blank" class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition" title="View">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                   </a>
-                  <button (click)="deleteDocument(doc.id)" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
+                  <button (click)="deleteDocument(doc.id)" class="p-2 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition" title="Delete">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                   </button>
                 </div>
@@ -358,7 +365,8 @@
 
     </main>
   }
-    <!-- Custom Confirmation Modal -->
+  
+  <!-- Custom Confirmation Modal -->
   <app-confirm-modal
     [isOpen]="modalState().isOpen"
     [title]="modalState().title"

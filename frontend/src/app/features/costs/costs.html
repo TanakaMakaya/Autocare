@@ -1,8 +1,8 @@
-<div class="min-h-screen bg-gray-50 pb-24">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 transition-colors duration-300">
   <!-- Header -->
-  <header class="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40">
-    <h1 class="text-xl font-bold text-gray-900">Costs</h1>
-    <p class="text-sm text-gray-500 mt-1">Track your fleet expenses</p>
+  <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 sticky top-0 z-40 transition-colors duration-300">
+    <h1 class="text-xl font-bold text-gray-900 dark:text-white">Costs</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Track your fleet expenses</p>
   </header>
 
   <!-- Main Content -->
@@ -10,45 +10,45 @@
     
     @if (isLoading()) {
       <div class="flex justify-center py-12">
-        <app-ripple-loader size="md" class="text-gray-900"></app-ripple-loader>
+        <app-ripple-loader size="md" class="text-gray-900 dark:text-white"></app-ripple-loader>
       </div>
     } @else if (services().length === 0) {
       <!-- Empty State -->
-      <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm text-center">
-        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm text-center transition-colors duration-300">
+        <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/>
         </svg>
-        <h3 class="text-lg font-bold text-gray-900 mb-2">No costs recorded yet</h3>
-        <p class="text-sm text-gray-500">Log a service on your vehicle to see your expenses here.</p>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">No costs recorded yet</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Log a service on your vehicle to see your expenses here.</p>
       </div>
     } @else {
 
       <!-- 1. Summary Card -->
-      <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
-        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Spent this year</p>
-        <h2 class="text-4xl font-bold text-gray-900 mb-6">{{ formatCurrency(spentThisYear()) }}</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
+        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Spent this year</p>
+        <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">{{ formatCurrency(spentThisYear()) }}</h2>
         
         <div class="grid grid-cols-3 gap-3">
-          <div class="bg-gray-50 rounded-2xl p-3 border border-gray-100">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">This Month</p>
-            <p class="text-lg font-bold text-gray-900 mt-1">{{ formatCurrency(thisMonth()) }}</p>
+          <div class="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-3 border border-gray-100 dark:border-gray-600">
+            <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">This Month</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">{{ formatCurrency(thisMonth()) }}</p>
           </div>
-          <div class="bg-gray-50 rounded-2xl p-3 border border-gray-100">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Monthly Avg</p>
-            <p class="text-lg font-bold text-gray-900 mt-1">{{ formatCurrency(monthlyAvg()) }}</p>
+          <div class="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-3 border border-gray-100 dark:border-gray-600">
+            <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Monthly Avg</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">{{ formatCurrency(monthlyAvg()) }}</p>
           </div>
-          <div class="bg-gray-50 rounded-2xl p-3 border border-gray-100">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wide">All Time</p>
-            <p class="text-lg font-bold text-gray-900 mt-1">{{ formatCurrency(allTime()) }}</p>
+          <div class="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-3 border border-gray-100 dark:border-gray-600">
+            <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">All Time</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">{{ formatCurrency(allTime()) }}</p>
           </div>
         </div>
       </div>
 
       <!-- 2. Monthly Spending Chart (Pure CSS) -->
-      <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="font-bold text-gray-900 text-lg">Monthly spending</h3>
-          <span class="text-sm font-medium text-gray-500">{{ today.getFullYear() }}</span>
+          <h3 class="font-bold text-gray-900 dark:text-white text-lg">Monthly spending</h3>
+          <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ today.getFullYear() }}</span>
         </div>
         
         <!-- Bar Chart -->
@@ -56,22 +56,23 @@
           @for (item of monthlyData(); track item.month) {
             <div class="flex flex-col items-center flex-1 group relative">
               <!-- Tooltip on hover -->
-              <div class="absolute -top-8 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-10">
+              <div class="absolute -top-8 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap z-10">
                 {{ item.month }}: {{ formatCurrency(item.amount) }}
               </div>
               
               <!-- The Bar -->
               <div 
                 [style.height.%]="getBarHeight(item.amount)"
-                class="w-full max-w-6 bg-gray-900 rounded-t-md transition-all duration-300 hover:bg-gray-700"
+                class="w-full max-w-6 bg-gray-900 dark:bg-white rounded-t-md transition-all duration-300 hover:bg-gray-700 dark:hover:bg-gray-300"
                 [class.bg-gray-200]="item.amount === 0"
+                [class.dark:bg-gray-700]="item.amount === 0"
               ></div>
             </div>
           }
         </div>
         
         <!-- X-Axis Labels -->
-        <div class="flex justify-between text-[10px] font-medium text-gray-400 mt-2">
+        <div class="flex justify-between text-[10px] font-medium text-gray-400 dark:text-gray-500 mt-2">
           @for (item of monthlyData(); track item.month) {
             <span class="flex-1 text-center">{{ item.month }}</span>
           }
@@ -79,10 +80,10 @@
       </div>
 
       <!-- 3. Cost Per Vehicle -->
-      <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="font-bold text-gray-900 text-lg">Cost per vehicle</h3>
-          <span class="text-sm font-medium text-gray-500">This year</span>
+          <h3 class="font-bold text-gray-900 dark:text-white text-lg">Cost per vehicle</h3>
+          <span class="text-sm font-medium text-gray-500 dark:text-gray-400">This year</span>
         </div>
         
         <div class="space-y-6">
@@ -90,18 +91,18 @@
             <div>
               <div class="flex items-start justify-between mb-2">
                 <div>
-                  <h4 class="font-bold text-gray-900">{{ vehicle.name }}</h4>
-                  <p class="text-xs text-gray-500 mt-0.5">
+                  <h4 class="font-bold text-gray-900 dark:text-white">{{ vehicle.name }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     {{ vehicle.services }} services · {{ formatCurrency(vehicle.lifetimeCost) }} lifetime
                   </p>
                 </div>
-                <span class="font-bold text-gray-900 text-lg">{{ formatCurrency(vehicle.yearCost) }}</span>
+                <span class="font-bold text-gray-900 dark:text-white text-lg">{{ formatCurrency(vehicle.yearCost) }}</span>
               </div>
               
               <!-- Progress Bar -->
-              <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div 
-                  class="h-full bg-gray-900 rounded-full transition-all duration-500"
+                  class="h-full bg-gray-900 dark:bg-white rounded-full transition-all duration-500"
                   [style.width.%]="getProgressWidth(vehicle.yearCost)"
                 ></div>
               </div>

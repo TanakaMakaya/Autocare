@@ -9,7 +9,7 @@ import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal'
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, BottomNav, ConfirmModalComponent], 
+  imports: [CommonModule, BottomNav, ConfirmModalComponent, RouterLink], 
   templateUrl: './profile.html'
 })
 export class Profile implements OnInit {
@@ -17,6 +17,8 @@ export class Profile implements OnInit {
   user = signal<{ name: string, email: string } | null>(null);
   documents = signal<any[]>([]);
   documentCount = computed(() => this.documents().length);
+
+  isDarkMode = signal(false);
 
   // --- Modal State ---
   modalState = signal({
@@ -36,10 +38,14 @@ export class Profile implements OnInit {
   ngOnInit(): void {
     this.loadUserProfile();
     this.loadGlobalDocuments();
+
+    
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    this.isDarkMode.set(isDark);
+    this.applyDarkMode(isDark);
   }
 
   loadUserProfile(): void {
-    // Placeholder for now
     this.user.set({ name: 'Tanaka', email: 'tanaka@example.com' });
   }
 
@@ -79,7 +85,6 @@ export class Profile implements OnInit {
     window.location.href = 'mailto:feedback@autocare.com?subject=AutoCare Feature Suggestion&body=Hi AutoCare Team,%0D%0A%0D%0AI would love to see a feature that...';
   }
 
-  // Updated Logout Method
   logout(): void {
     this.openModal(
       'Sign out?',
@@ -88,7 +93,25 @@ export class Profile implements OnInit {
         this.authService.logout(); 
         this.router.navigate(['/auth/login']);
       },
-      true // isDestructive (makes the button red)
+      true 
     );
   }
+
+  // --- Dark Mode Methods ---
+  toggleDarkMode(): void {
+    const newVal = !this.isDarkMode();
+    this.isDarkMode.set(newVal);
+    localStorage.setItem('darkMode', String(newVal));
+    this.applyDarkMode(newVal);
+  }
+
+  private applyDarkMode(isDark: boolean): void {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
+
+
 }

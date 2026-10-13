@@ -41,4 +41,11 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('access_token');
   }
+
+    changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/change-password/`, {
+      old_password: oldPassword,
+      new_password: newPassword
+    });
+  }
 }

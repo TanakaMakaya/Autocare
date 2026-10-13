@@ -1,4 +1,4 @@
-<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 pb-safe pt-2 z-50 shadow-lg">
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 pb-safe pt-2 z-50 shadow-lg transition-colors duration-300">
   <div class="max-w-md mx-auto flex justify-around items-center">
     @for (item of navItems; track item.path) {
       <a 
@@ -6,7 +6,11 @@
         routerLinkActive="active"
         class="flex flex-col items-center justify-center py-2 px-3 flex-1 transition-colors duration-200"
         [class.text-gray-900]="isActive(item.path)"
+        [class.dark:text-white]="isActive(item.path)"
         [class.text-gray-400]="!isActive(item.path)"
+        [class.dark:text-gray-500]="!isActive(item.path)"
+        [class.hover:text-gray-900]="!isActive(item.path)"
+        [class.dark:hover:text-white]="!isActive(item.path)"
       >
         <!-- Home Icon -->
         @if (item.icon === 'home') {
@@ -16,7 +20,7 @@
           </svg>
         }
 
-        <!-- Car Icon (Updated to a proper sedan/hatchback) -->
+        <!-- Car Icon -->
         @if (item.icon === 'car') {
           <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 

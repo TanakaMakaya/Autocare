@@ -1,22 +1,22 @@
-<div class="min-h-screen bg-gray-50 pb-24">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24 transition-colors duration-300">
   @if (isLoading()) {
-    <div class="flex flex-col items-center justify-center h-screen">
-      <app-ripple-loader size="md" class="text-gray-900 mb-4"></app-ripple-loader>
+    <div class="flex flex-col items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <app-ripple-loader size="md" class="text-gray-900 dark:text-white mb-4"></app-ripple-loader>
     </div>
   } @else {
 
     <!-- 1. Header -->
-    <header class="px-4 pt-6 pb-4 bg-white border-b border-gray-100 flex justify-between items-center">
+    <header class="px-4 pt-6 pb-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center transition-colors duration-300">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">My Garage</h1>
-        <p class="text-sm text-gray-500 mt-1">Welcome back!</p>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Garage</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Welcome back!</p>
       </div>
-      <a routerLink="/reminders" aria-label="Reminders" class="relative p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition focus:outline-none focus:ring-2 focus:ring-gray-900">
-        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <a routerLink="/reminders" aria-label="Reminders" class="relative p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-500">
+        <svg class="w-6 h-6 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
         </svg>
         @if (overdueReminders().length > 0) {
-          <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+          <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"></span>
         }
       </a>
     </header>
@@ -26,61 +26,61 @@
       <!-- 2. My Garage (Horizontal Scroll) -->
       <section aria-labelledby="vehicles-heading">
         <div class="flex items-center justify-between mb-4">
-          <h2 id="vehicles-heading" class="text-lg font-bold text-gray-900">My Vehicles</h2>
+          <h2 id="vehicles-heading" class="text-lg font-bold text-gray-900 dark:text-white">My Vehicles</h2>
         </div>
         
         <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide snap-x">
           @for (vehicle of vehicles(); track vehicle.id) {
-            <a [routerLink]="['/vehicles', vehicle.id]" class="shrink-0 w-64 bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition snap-start focus:outline-none focus:ring-2 focus:ring-gray-900">
+            <a [routerLink]="['/vehicles', vehicle.id]" class="shrink-0 w-64 bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition snap-start focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-500">
               @if (vehicle.photo_url) {
                 <img 
                   [src]="vehicle.photo_url" 
                   [alt]="vehicle.manufacturer + ' ' + vehicle.model" 
                   loading="lazy"
-                  class="w-full h-32 object-cover rounded-xl mb-3 bg-gray-100"
+                  class="w-full h-32 object-cover rounded-xl mb-3 bg-gray-100 dark:bg-gray-700"
                 />
               } @else {
-                <div class="w-full h-32 bg-gray-100 rounded-xl mb-3 flex items-center justify-center">
-                  <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-xl mb-3 flex items-center justify-center">
+                  <svg class="w-10 h-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
                   </svg>
                 </div>
               }
-              <h3 class="font-bold text-gray-900 truncate">{{ vehicle.manufacturer }} {{ vehicle.model }}</h3>
-              <p class="text-xs text-gray-500 truncate mt-0.5">{{ vehicle.registration_number }}</p>
+              <h3 class="font-bold text-gray-900 dark:text-white truncate">{{ vehicle.manufacturer }} {{ vehicle.model }}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ vehicle.registration_number }}</p>
             </a>
           }
           
           <!-- Add Vehicle Card -->
-          <a routerLink="/vehicles/add" class="shrink-0 w-64 min-h-47.5 bg-gray-50 rounded-2xl p-4 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:bg-gray-100 transition snap-start focus:outline-none focus:ring-2 focus:ring-gray-900">
-            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-2">
-              <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <a routerLink="/vehicles/add" class="shrink-0 w-64 min-h-47.5 bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition snap-start focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-500">
+            <div class="w-12 h-12 bg-white dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm mb-2">
+              <svg class="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             </div>
-            <p class="font-bold text-gray-900 text-sm">Add Vehicle</p>
+            <p class="font-bold text-gray-900 dark:text-white text-sm">Add Vehicle</p>
           </a>
         </div>
       </section>
 
       <!-- 3. Attention Needed -->
       @if (overdueReminders().length > 0 || dueSoonReminders().length > 0) {
-        <a routerLink="/reminders" class="block bg-white rounded-3xl p-6 border border-gray-200 shadow-sm hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-gray-900">
+        <a routerLink="/reminders" class="block bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 transition focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-500">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="font-bold text-gray-900 text-lg">Attention Needed</h3>
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <h3 class="font-bold text-gray-900 dark:text-white text-lg">Attention Needed</h3>
+            <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </div>
           
           <div class="grid grid-cols-2 gap-4">
             @if (overdueReminders().length > 0) {
-              <div class="bg-red-50 rounded-2xl p-4 border border-red-100">
-                <p class="text-2xl font-bold text-red-600">{{ overdueReminders().length }}</p>
-                <p class="text-xs font-bold text-red-500 uppercase tracking-wide mt-1">Overdue</p>
+              <div class="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 border border-red-100 dark:border-red-800">
+                <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ overdueReminders().length }}</p>
+                <p class="text-xs font-bold text-red-500 dark:text-red-400 uppercase tracking-wide mt-1">Overdue</p>
               </div>
             }
             @if (dueSoonReminders().length > 0) {
-              <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100">
-                <p class="text-2xl font-bold text-amber-600">{{ dueSoonReminders().length }}</p>
-                <p class="text-xs font-bold text-amber-500 uppercase tracking-wide mt-1">Due Soon</p>
+              <div class="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-4 border border-amber-100 dark:border-amber-800">
+                <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ dueSoonReminders().length }}</p>
+                <p class="text-xs font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wide mt-1">Due Soon</p>
               </div>
             }
           </div>
@@ -90,18 +90,18 @@
       <!-- 4. Recent Activity -->
       @if (recentServices().length > 0) {
         <section>
-          <h3 class="font-bold text-gray-900 text-lg mb-4">Recent Activity</h3>
+          <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-4">Recent Activity</h3>
           <div class="space-y-3">
             @for (service of recentServices(); track service.id) {
-              <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm flex items-center space-x-4">
-                <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm flex items-center space-x-4 transition-colors duration-300">
+                <div class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h4 class="font-bold text-gray-900 text-sm truncate">{{ getServiceName(service) }}</h4>
-                  <p class="text-xs text-gray-500 truncate mt-0.5">{{ service.vehicle_name }} · {{ formatDate(service.date) }}</p>
+                  <h4 class="font-bold text-gray-900 dark:text-white text-sm truncate">{{ getServiceName(service) }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ service.vehicle_name }} · {{ formatDate(service.date) }}</p>
                 </div>
-                <p class="font-bold text-gray-900 text-sm shrink-0">{{ formatCurrency(service.total_cost) }}</p>
+                <p class="font-bold text-gray-900 dark:text-white text-sm shrink-0">{{ formatCurrency(service.total_cost) }}</p>
               </div>
             }
           </div>
@@ -109,15 +109,15 @@
       }
 
       <!-- 5. Financial Snapshot -->
-      <a routerLink="/costs" class="block bg-gray-900 rounded-3xl p-6 shadow-md hover:bg-gray-800 transition text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+      <a routerLink="/costs" class="block bg-gray-900 dark:bg-gray-800 rounded-3xl p-6 shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-gray-500 border border-gray-800 dark:border-gray-700">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Spent this year</p>
+            <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Spent this year</p>
             <h2 class="text-3xl font-bold">{{ formatCurrency(yearlySpend()) }}</h2>
           </div>
-          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
-        <p class="text-xs text-gray-400 mt-4 flex items-center font-medium">
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-4 flex items-center font-medium">
           View full financial dashboard 
           <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </p>
