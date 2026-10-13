@@ -9,7 +9,7 @@ import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal'
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, BottomNav, ConfirmModalComponent], 
+  imports: [CommonModule, BottomNav, ConfirmModalComponent, RouterLink], 
   templateUrl: './profile.html'
 })
 export class Profile implements OnInit {

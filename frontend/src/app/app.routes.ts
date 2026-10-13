@@ -47,5 +47,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/documents/documents').then(m => m.DocumentsComponent), // We'll build this next!
     canActivate: [authGuard] 
   },
+    { 
+    path: 'profile/change-password', 
+    loadComponent: () => import('./features/change-password/change-password').then(m => m.ChangePasswordComponent),
+    canActivate: [authGuard] 
+  },
   { path: '**', redirectTo: 'auth/get-started' }
 ];
