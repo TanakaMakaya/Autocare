@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
 
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:is(.dark *));
 
 @theme {
   /* Primary Colors - Forest Code */
@@ -30,7 +31,3 @@
   --color-accent-600: #EA580C;
 }
 
-/* Optional: Set default background */
-body {
-  @apply bg-secondary-50 text-gray-900;
-}
