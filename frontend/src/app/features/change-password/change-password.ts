@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RippleLoader } from '../../shared/ripple-loader/ripple-loader';
 
@@ -19,13 +19,24 @@ export class ChangePasswordComponent {
   successMessage = '';
   isLoading = false;
 
+  // ✅ 1. Add these visibility toggles
+  showOldPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
+
   constructor(private authService: AuthService, private router: Router) {}
+
+  // ✅ 2. Add this helper function
+  toggleVisibility(field: 'old' | 'new' | 'confirm'): void {
+    if (field === 'old') this.showOldPassword = !this.showOldPassword;
+    if (field === 'new') this.showNewPassword = !this.showNewPassword;
+    if (field === 'confirm') this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Frontend Validation
     if (this.newPassword.length < 8) {
       this.errorMessage = 'New password must be at least 8 characters.';
       return;
@@ -44,8 +55,6 @@ export class ChangePasswordComponent {
         this.oldPassword = '';
         this.newPassword = '';
         this.confirmPassword = '';
-        
-        // Optional: Redirect back to profile after 2 seconds
         setTimeout(() => this.router.navigate(['/profile']), 2000);
       },
       error: (err) => {
