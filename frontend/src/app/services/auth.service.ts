@@ -48,4 +48,9 @@ export class AuthService {
       new_password: newPassword
     });
   }
+    // Fetch the currently logged-in user's profile
+  getCurrentUser(): Observable<any> {
+
+    return this.http.get(`${environment.apiUrl}/auth/me/`); 
+  }
 }
