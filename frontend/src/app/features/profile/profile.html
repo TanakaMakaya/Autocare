@@ -8,20 +8,26 @@
   <!-- Main Content -->
   <main class="px-4 py-6 max-w-2xl mx-auto space-y-6">
     
-    <!-- 1. Account Section -->
+       <!-- 1. Account Section -->
     <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
       <h2 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Account</h2>
       
       <div class="flex items-center space-x-4">
-        <!-- Avatar -->
+        <!-- Avatar (Uses first letter of first name, or first letter of email as fallback) -->
         <div class="w-16 h-16 bg-gray-900 dark:bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0">
-          {{ user()?.name?.charAt(0) || 'A' }}
+          {{ user()?.first_name ? (user().first_name | slice:0:1) : (user().email | slice:0:1) }}
         </div>
         
         <!-- Info -->
         <div class="flex-1 min-w-0">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white truncate">{{ user()?.name }}</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ user()?.email }}</p>
+          <!-- Dynamic Name -->
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white truncate">
+            {{ user()?.first_name }} {{ user()?.last_name }}
+          </h3>
+          <!-- Dynamic Email -->
+          <p class="text-sm text-gray-500 dark:text-gray-400 truncate">
+            {{ user()?.email }}
+          </p>
         </div>
       </div>
     </div>

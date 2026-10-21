@@ -14,10 +14,12 @@ import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal'
 })
 export class Profile implements OnInit {
   appVersion = '1.0.0';
-  user = signal<{ name: string, email: string } | null>(null);
+  
+  // Cleaned up signals (no duplicates)
+  user = signal<any>(null);
+  isLoading = signal(true);
   documents = signal<any[]>([]);
   documentCount = computed(() => this.documents().length);
-
   isDarkMode = signal(false);
 
   // --- Modal State ---
@@ -38,15 +40,25 @@ export class Profile implements OnInit {
   ngOnInit(): void {
     this.loadUserProfile();
     this.loadGlobalDocuments();
-
     
     const isDark = localStorage.getItem('darkMode') === 'true';
     this.isDarkMode.set(isDark);
     this.applyDarkMode(isDark);
   }
 
+  // Fetch the user data from Django
   loadUserProfile(): void {
-    this.user.set({ name: 'Tanaka', email: 'tanaka@example.com' });
+    this.isLoading.set(true);
+    this.authService.getCurrentUser().subscribe({
+      next: (data) => {
+        this.user.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load profile', err);
+        this.isLoading.set(false);
+      }
+    });
   }
 
   loadGlobalDocuments(): void {
@@ -91,7 +103,7 @@ export class Profile implements OnInit {
       'Are you sure you want to sign out of your account?',
       () => {
         this.authService.logout(); 
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/auth/login']); // Adjust if your login route is just '/login'
       },
       true 
     );
@@ -112,6 +124,4 @@ export class Profile implements OnInit {
       document.documentElement.classList.remove('dark');
     }
   }
-
-
 }
