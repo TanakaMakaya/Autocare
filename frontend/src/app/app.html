@@ -1,3 +1,32 @@
-<router-outlet>
 
-</router-outlet>
+<div class="hidden md:flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8 text-center">
+  
+  <!-- Mobile Icon -->
+  <svg class="w-24 h-24 text-blue-500 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+  </svg>
+  
+  <!-- Warning Text -->
+  <h1 class="text-3xl font-bold mb-4">Mobile App Only</h1>
+  <p class="text-gray-400 text-lg max-w-md leading-relaxed">
+    AutoCare is designed specifically for your smartphone. 
+    <br><br>
+    Please open this link on your mobile device for the best experience.
+  </p>
+  
+  <!-- Developer Tip (Optional but helpful) -->
+  <div class="mt-8 p-4 bg-gray-800 rounded-xl border border-gray-700 max-w-sm">
+    <p class="text-sm text-gray-500">
+       <strong>Testing on desktop?</strong><br>
+      Press <kbd class="px-2 py-1 bg-gray-700 rounded text-xs">F12</kbd> and click the "Toggle Device Toolbar" icon to preview the mobile view.
+    </p>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. MAIN APP (Visible ONLY on screens < 768px) -->
+<!-- ========================================== -->
+<div class="block md:hidden">
+  
+  <router-outlet></router-outlet>
+</div>
